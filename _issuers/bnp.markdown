@@ -4,7 +4,7 @@ title:  "BNP Paribas"
 date:   2026-02-24 17:26:40 +0100
 categories: issuers
 ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
-footer-extra: dtable.html
+footer-extra: dtable-init.html
 comments: false
 wsDatatableCols: [
   'ISIN','Issuer','Name','Composition','Issued','Expires','Currency','Coupon','Typpe'

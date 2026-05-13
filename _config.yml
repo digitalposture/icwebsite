@@ -28,8 +28,6 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 author: Digital Posture
 
-# dataTableUrl: http://127.0.0.1:8080
-
 # websvc config
 col_sep: ';'
 wsUrl: http://127.0.0.1:8080
@@ -56,7 +54,7 @@ plugins:
   - jekyll-remote-theme
 
 site-css: "/assets/css/icws.css"
-site-js: "/assets/js/icws.js"
+# site-js: "/assets/js/icws.js"
 remote_theme: daattali/beautiful-jekyll@6.0.1
 
 ###############################################

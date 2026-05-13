@@ -21,7 +21,7 @@
             .then(dataRaw => {
                 dataRaw.shift(); // remove header
                 console.log('dataRaw retrieved:', dataRaw, dataRaw.length);
-                const n = {{ page.wsDatatableCols | size }}; // number of columns to extract
+                const n = '{{ page.wsDatatableCols | size }}'; // number of columns to extract
                 const extractCols = dataRaw.map(row => {
                     const parts = row.split('{{ site.col_sep }}');
                     return parts.slice(0,n).map(p => p.trim()).join('{{ site.col_sep }}');

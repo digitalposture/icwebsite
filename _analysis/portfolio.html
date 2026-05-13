@@ -2,7 +2,7 @@
 layout: page
 title: Portfolio Analysis
 subtitle: How a single company can influence your portfolio
-footer-extra: mermaid-footer.html
+footer-extra: [mermaid-footer.html, select-init.html]
 comments: false
 hasMermaid: true
 wsSelectId: cert_select
@@ -85,9 +85,4 @@ wsSelectPath: /certificates-tickers/*
         render('source-to-target');
       });
   }; // .btnPrimary::onclick
-
-
-  // select is initialized automatically by page.wsSelectId property (if exists)
-  wsSelectId = '{{ page.wsSelectId }}';
-  wsSelectPath = '{{ page.wsSelectPath }}';
 </script>

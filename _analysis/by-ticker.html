@@ -3,7 +3,7 @@ layout: page
 title: Certificates Analysis by Company
 subtitle: How a single company can influence a set of certificates
 ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
-footer-extra: dtable.html
+footer-extra: [dtable-init.html, select-init.html]
 comments: false
 before-content: intro-page.html
 wsDatatableCols: [
@@ -50,20 +50,9 @@ wsSelectPath: /tickers/*
 </div>
 <script>
   <!-- manage ticker once selected from options -->
-document.getElementById('ticker_select').addEventListener('change', function() {
-    var ticker = this.value;
-    if (ticker) {
-        // Fetch data from the API endpoint
-        console.log("Selected ticker: ", '{{ site.wsUrl }}/certificates/*?tickers=' , ticker);
-        dtUpdate('tickers=' + ticker);
-    } else {
-        console.log("No ticker selected");
-    }
-});
-</script>
-<script>
-    // select is initialized automatically by page.wsSelectId property (if exists)
-  wsSelectId = '{{ page.wsSelectId }}';
-  wsSelectPath = '{{ page.wsSelectPath }}';
+  document.getElementById('ticker_select').addEventListener('change', function() {
+    const ticker = this.value;
+    if (ticker) dtUpdate('tickers=' + ticker);
+  });
 </script>
 
