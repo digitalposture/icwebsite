@@ -2,60 +2,111 @@
 layout: page
 title: Portfolio Analysis
 subtitle: How a single company can influence your portfolio
-footer-extra: [plotly-init.html, select-init.html]
+footer-extra: [plotly-init.html, select-init.html, dtable-init.html]
 comments: false
 hasPlot: true
 wsSelectId: cert_select
 wsSelectPath: /certificates-tickers/*
 wsSelectValPos: 0
 wsSelectTextPos: 1
+wsDatatableIds: [
+  'details_table',
+  'tickers_table'
+]
+wsDatatableCols: [
+  ['ISIN', 'Issuer', 'Name', 'Tags'],
+  ['ISIN', 'Name', 'Stock Name', 'Stock Ticker', 'Industry', 'Sector']
+]
+wsDatatablePaths: [
+  '/certificates/',
+  '/certificates-tickers/'
+]
 ---
-<div class="tool-container">
+<!-- Tabs -->
+<ul class="nav nav-tabs" id="portfolioTabs" role="tablist">
+  <li class="nav-item active">
+    <a class="nav-link active" id="info-tab" data-toggle="tab" href="#infoPane" role="tab">
+      General
+    </a>
+  </li>
 
-  <!-- Chart -->
-  <div class="tool-section">
-    <!-- <pre class="mermaid"></pre> -->
-     <div id='plotlyid'><!-- Plotly chart will be drawn inside this DIV --></div>
+  <li class="nav-item">
+    <a class="nav-link" id="chart-tab" data-toggle="tab" href="#chartPane" role="tab">
+      Chart
+    </a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link" id="table-tab" data-toggle="tab" href="#tablePane" role="tab">
+      Table
+    </a>
+  </li>
+</ul>
+
+<div class="tab-content mt-3">
+
+  <!-- General tab -->
+  <div class="tab-pane fade show active" id="infoPane" role="tabpanel">
+
+    <div class="tool-container">
+
+      <div class="tool-section">
+        <label for="cert_select" class="tool-label">
+          Select a certificate or paste a list of ISINs:
+        </label>
+
+        <select name="cert_select" id="cert_select" class="tool-input">
+          <option value="">-- Choose a certificate --</option>
+        </select>
+
+        <textarea id="cert_csv_list" class="tool-input" rows="3" placeholder="DE000VG656A7, NLBNPIT30309"></textarea>
+      </div>
+
+      <div class="tool-actions">
+        <button id="btnPrimary" class="btn btn-primary">Load Data</button>
+      </div>
+
+    </div>
+
+
   </div>
 
-  <!-- Input controls -->
-  <div class="tool-section">
-    <label for="cert_select" class="tool-label">
-      Select a certificate or paste a list of ISINs:
-    </label>
+  <!-- Chart tab -->
+  <div class="tab-pane fade" id="chartPane" role="tabpanel">
 
-    <select name="cert_select" id="cert_select" class="tool-input">
-      <option value="">-- Choose a certificate --</option>
-    </select>
+    <div class="tool-section">
+      <div id="plotlyid"></div>
+    </div>
 
-    <textarea id="cert_csv_list" class="tool-input" rows="3" placeholder="DE000VG656A7, NLBNPIT30309"></textarea>
+      <div class="tool-actions">
+        <button id="btnSwap" class="btn btn-secondary">Swap Certs ↔ Tickers</button>
+      </div>
+
+       {% include dtable-th.html tablePos=1 %}
+
   </div>
 
-  <!-- Actions -->
-  <div class="tool-actions">
-    <button id="btnPrimary" class="btn btn-primary">
-      Load Data
-    </button>
-    <button id="btnSwap" class="btn btn-secondary">
-      Swap Certs ↔ Tickers
-    </button>
+  <!-- Table tab -->
+  <div class="tab-pane fade" id="tablePane" role="tabpanel">
+
+    <div class="tool-section">
+
+      <div class="table-header">
+        <h4>Certificates Details</h4>
+        <span id="result_count" class="table-count"></span>
+      </div>
+
+      <div class="table-wrapper">
+        {% include dtable-th.html tablePos=0 %}
+      </div>
+
+    </div>
+
   </div>
 
 </div>
-<!-- multiselect to list the cert_csv_list by lines -->
-<select id="cert_multiselect" class="tool-input" multiple size="5">
-</select>
-
-<!-- <textarea id="mm_preview" hidden></textarea> -->
 
 <script>
-  let render = function (versus) {
-    const data = transformArrayToCsv(certs_ticker_data, swapSwitch ? 'target-to-source' : 'source-to-target');
-    let preview = document.getElementById("mm_preview");
-    preview.value = "  sankey-beta\n" + data;
-
-    preview.onchange();
-  }; // render
 
   // button btnSwap
   let swapSwitch = false;
@@ -69,9 +120,8 @@ wsSelectTextPos: 1
 
   // button btnPrimary
   document.getElementById('btnPrimary').onclick = async function () {
-    let cert_isins = document.getElementById('cert_csv_list').value || document.getElementById('cert_select').value;
-    // if (cert_isins == "") 
-    //   cert_isins = document.getElementById('cert_select').value;
+    let cert_isins = document.getElementById('cert_csv_list').value.trim() || document.getElementById('cert_select').value;
+    if (cert_isins == "") return; // TODO: Info Message: Please enter at least one certificate ISIN.
 
     console.log("Selected certs: ", '{{ site.wsUrl }}/certificates-tickers/', cert_isins);
     var secret = "{{ site.wsSecret }}";
@@ -89,8 +139,16 @@ wsSelectTextPos: 1
         certs_ticker_data = createPlotlyData(dataRaw, 0, 3, 1, 2); // source is cert at pos 0, target is ticker at pos 3
         console.log("test::plotlyData:", certs_ticker_data);
         drawPlotly(certs_ticker_data, swapSwitch);
+        dtUpdate(0, cert_isins);
+        dtUpdate(1, cert_isins);
+        new bootstrap.Tab(
+          document.getElementById('chart-tab')
+        ).show();
         //render('source-to-target');
 
       });
   }; // .btnPrimary::onclick
+  //   $('a[data-toggle="tab"]').on('shown.bs.tab', function () {
+  //     Plotly.Plots.resize('plotlyid');
+  // });
 </script>

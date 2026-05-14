@@ -1,7 +1,7 @@
 <script>
     console.log('dtable-init.html INIT -- it loads datable js and css');
 </script>
-{% if page.wsDatatablePath %}
+{% if page.wsDatatableIds %}
 
 <!-- DataTables  js if async => lines#74 does not work properly -->
 <script type="text/javascript" id="datatables-script" src="//code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -13,8 +13,9 @@
          Credit here: http://www.beardedhacker.com/blog/2015/08/28/add-class-attribute-to-markdown-table/
       -->
 <script>
-    console.log('DataTables starting...');
+    
     function showError(message) {
+        clearError();
         const errorBox = document.getElementById('errorBox');
 
         errorBox.textContent = message;
@@ -27,7 +28,58 @@
         errorBox.textContent = '';
         errorBox.classList.add('hidden');
     }
-    var table = new DataTable('#dTable');
+    // var table = new DataTable('#dTable');
+    
+</script>
+<script>
+    console.log('JS DataTables starting...');
+    const tableIds = {{ page.wsDatatableIds | jsonify }};
+    const tableCols = {{ page.wsDatatableCols | jsonify }};
+    const tablePaths = {{ page.wsDatatablePaths | jsonify }};
+    console.log('DataTables tableIds:', tableIds);
+    console.log('DataTables tableCols:', tableCols);
+    console.log('DataTables tablePaths:', tablePaths);
+
+
+    // function to update DataTable with query string, page.wsDatatablePath is needed.
+    var dtUpdate = function (tablePos, queryString) {
+        const urlPath = tablePaths[tablePos] + queryString;
+        console.log('==> Calling... {{ site.wsUrl }}' + urlPath)
+        var secret = "{{ site.wsSecret }}";
+        fetch('{{ site.wsUrl }}' + urlPath, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + secret
+            }
+        })
+            .then(response => response.json())
+            .then(dataRaw => {
+                dataRaw.shift(); // remove header
+                console.log('dataRaw retrieved:', dataRaw, dataRaw.length);
+                const n = tableCols[tablePos].length; // number of columns to extract
+                const extractCols = dataRaw.map(row => {
+                    const parts = row.split('{{ site.ws_csv_delimiter }}');
+                    return parts.slice(0,n).map(p => p.trim()).join('{{ site.ws_csv_delimiter }}');
+                });
+
+                let data = dataRaw.map(function (item) {
+                    return item.split('{{ site.ws_csv_delimiter }}'); // wrap each string in an array
+                });
+                let table = new DataTable('#' + tableIds[tablePos]);
+                table.clear(); // Clear existing data
+                table.rows.add(data); // Add new data
+                table.draw(); // Redraw the table to reflect the new data
+                console.log('Certificates data loaded:', data.length, data);
+            })
+            .catch (error => console.error('Error fetching certificates:', error));
+        }; // dtUpdate
+
+
+    if ('{{ page.wsDatatableAutoLoad }}' == 'true') {
+        console.log('Auto-loading DataTable with initial data... {{ page.url}} {{ page.wsDatatableAutoLoad }}');
+        dtUpdate(0,''); // initial load with empty query string
+    }
     $(document).ready(function () {
         console.log('DataTables document ready');
         // TODO: autoload data per table
@@ -35,4 +87,5 @@
         // if (dtRun != undefined && !dtRun) return;
     });
 </script>
+
 {%- endif %}

@@ -6,10 +6,15 @@ ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
 footer-extra: [dtable-init.html, select-init.html]
 comments: false
 before-content: intro-page.html
-wsDatatableCols: [
-  'ISIN', 'Issuer', 'Name', 'Tags'
+wsDatatableIds: [
+  'details_table'
 ]
-wsDatatablePath: /certificates/*
+wsDatatableCols: [
+  ['ISIN', 'Issuer', 'Name', 'Tags']
+]
+wsDatatablePaths: [
+  /certificates/*
+]
 wsSelectId: ticker_select
 wsSelectPath: /tickers/*
 # ext-js: [
@@ -43,7 +48,7 @@ wsSelectPath: /tickers/*
     </div>
 
     <div class="table-wrapper">
-      {% include dtable-th.html %}
+      {% include dtable-th.html tablePos=0 %}
     </div>
   </div>
 
@@ -52,7 +57,7 @@ wsSelectPath: /tickers/*
   <!-- manage ticker once selected from options -->
   document.getElementById('ticker_select').addEventListener('change', function() {
     const ticker = this.value;
-    if (ticker) dtUpdate('tickers=' + ticker);
+    if (ticker) dtUpdate(0, '?tickers=' + ticker);
   });
 </script>
 

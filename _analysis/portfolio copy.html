@@ -1,0 +1,105 @@
+---
+layout: page
+title: Portfolio Analysis
+subtitle: How a single company can influence your portfolio
+footer-extra: [plotly-init.html, select-init.html, dtable-init.html]
+comments: false
+hasPlot: true
+wsSelectId: cert_select
+wsSelectPath: /certificates-tickers/*
+wsSelectValPos: 0
+wsSelectTextPos: 1
+---
+<div class="tool-container">
+
+  <!-- Chart -->
+  <div class="tool-section">
+    <!-- <pre class="mermaid"></pre> -->
+     <div id='plotlyid'><!-- Plotly chart will be drawn inside this DIV --></div>
+  </div>
+
+  <!-- Input controls -->
+  <div class="tool-section">
+    <label for="cert_select" class="tool-label">
+      Select a certificate or paste a list of ISINs:
+    </label>
+
+    <select name="cert_select" id="cert_select" class="tool-input">
+      <option value="">-- Choose a certificate --</option>
+    </select>
+
+    <textarea id="cert_csv_list" class="tool-input" rows="3" placeholder="DE000VG656A7, NLBNPIT30309"></textarea>
+  </div>
+
+  <!-- Actions -->
+  <div class="tool-actions">
+    <button id="btnPrimary" class="btn btn-primary">
+      Load Data
+    </button>
+    <button id="btnSwap" class="btn btn-secondary">
+      Swap Certs ↔ Tickers
+    </button>
+  </div>
+
+</div>
+<!-- Table -->
+  <div class="tool-section">
+    <div class="table-header">
+      <h4>Certificates</h4>
+      <span id="result_count" class="table-count"></span>
+    </div>
+
+    <div class="table-wrapper">
+      {% include dtable-th.html %}
+    </div>
+  </div>
+
+
+<!-- <textarea id="mm_preview" hidden></textarea> -->
+
+<script>
+  let render = function (versus) {
+    const data = transformArrayToCsv(certs_ticker_data, swapSwitch ? 'target-to-source' : 'source-to-target');
+    let preview = document.getElementById("mm_preview");
+    preview.value = "  sankey-beta\n" + data;
+
+    preview.onchange();
+  }; // render
+
+  // button btnSwap
+  let swapSwitch = false;
+  let certs_ticker_data = [];
+
+  document.getElementById('btnSwap').onclick = function () {
+    swapSwitch = !swapSwitch;
+    //render(swapSwitch ? 'target-to-source' : 'source-to-target');
+    drawPlotly(certs_ticker_data, swapSwitch);
+  }; // .btnSwap::onclick
+
+  // button btnPrimary
+  document.getElementById('btnPrimary').onclick = async function () {
+    let cert_isins = document.getElementById('cert_csv_list').value || document.getElementById('cert_select').value;
+    // if (cert_isins == "") 
+    //   cert_isins = document.getElementById('cert_select').value;
+
+    console.log("Selected certs: ", '{{ site.wsUrl }}/certificates-tickers/', cert_isins);
+    var secret = "{{ site.wsSecret }}";
+    fetch('{{ site.wsUrl }}/certificates-tickers/' + cert_isins, {
+      method: "GET",
+      headers: {
+        "Content-Type": "text/plain",
+        "Authorization": "Bearer " + secret
+      }
+    })
+      .then(response => response.json())
+      .then(dataRaw => {
+        console.log("test::data:", dataRaw);
+        //dataRaw.shift(); // remove header
+        certs_ticker_data = createPlotlyData(dataRaw, 0, 3, 1, 2); // source is cert at pos 0, target is ticker at pos 3
+        console.log("test::plotlyData:", certs_ticker_data);
+        drawPlotly(certs_ticker_data, swapSwitch);
+        //render('source-to-target');
+
+      });
+  }; // .btnPrimary::onclick
+</script>

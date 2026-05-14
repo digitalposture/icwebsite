@@ -1,48 +1,15 @@
-{% if page.wsDatatableCols %}
-<table id="dTable" class="styled-table" data-dt-path="" data-dt-run="false">
+{% assign tablePos = include.tablePos | default: 0 %}
+{% assign tableId = page.wsDatatableIds[tablePos] %}
+{% assign tableCols = page.wsDatatableCols[tablePos] %}
+{% if tableId && tableCols %}
+<table id="{{ tableId }}" class="styled-table" data-dt-path="" data-dt-run="false">
     <thead>
-        <tr>{% for col in page.wsDatatableCols %}<th>{{ col }}</th>{% endfor %}</tr>
+        <tr>{% for col in tableCols %}<th>{{ col }}</th>{% endfor %}</tr>
     </thead>
     <tbody></tbody>
 </table>
-<script>
-    // function to update DataTable with query string, page.wsDatatablePath is needed.
-    var dtUpdate = function (queryString) {
-        console.log('==> Calling... {{ site.wsUrl }}{{page.wsDatatablePath}}?' + queryString)
-        var secret = "{{ site.wsSecret }}";
-        fetch('{{ site.wsUrl }}{{page.wsDatatablePath}}?' + queryString, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + secret
-            }
-        })
-            .then(response => response.json())
-            .then(dataRaw => {
-                dataRaw.shift(); // remove header
-                console.log('dataRaw retrieved:', dataRaw, dataRaw.length);
-                const n = '{{ page.wsDatatableCols | size }}'; // number of columns to extract
-                const extractCols = dataRaw.map(row => {
-                    const parts = row.split('{{ site.ws_csv_delimiter }}');
-                    return parts.slice(0,n).map(p => p.trim()).join('{{ site.ws_csv_delimiter }}');
-                });
-
-                let data = dataRaw.map(function (item) {
-                    return item.split('{{ site.ws_csv_delimiter }}'); // wrap each string in an array
-                });
-                table.clear(); // Clear existing data
-                table.rows.add(data); // Add new data
-                table.draw(); // Redraw the table to reflect the new data
-                console.log('Certificates data loaded:', data.length, data);
-            })
-            .catch (error => console.error('Error fetching certificates:', error));
-        }; // dtUpdate
-
-
-    console.log('DataTables initialized with columns: {{ page.wsDatatableCols | join: ", " }}');
-    if ('{{ page.wsDatatableAutoLoad }}' == 'true') {
-        console.log('Auto-loading DataTable with initial data... {{ page.url}} {{ page.wsDatatableAutoLoad }}');
-        dtUpdate(''); // initial load with empty query string
-    }
-</script>
 {%- endif %}
+<script> 
+console.log('Initializing DataTable with tablePos: {{tablePos}}, tableId: {{tableId}}, tableCols: {{tableCols}}');
+console.log('DataTables initialized with columns: {{ tableCols | join: ", " }}');
+</script>
