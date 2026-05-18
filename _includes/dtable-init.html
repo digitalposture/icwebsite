@@ -18,10 +18,35 @@
     const tableIds = {{ page.wsDatatableIds | jsonify }};
     const tableCols = {{ page.wsDatatableCols | jsonify }};
     const tablePaths = {{ page.wsDatatablePaths | jsonify }};
+    const tableRespCols = {{ page.wsDatatableRespCols | jsonify }};
     console.log('DataTables tableIds:', tableIds);
     console.log('DataTables tableCols:', tableCols);
     console.log('DataTables tablePaths:', tablePaths);
 
+    var extractData = function (dataRaw, tablePos) {
+        // split header
+        const header = dataRaw[0].split('{{ site.ws_csv_delimiter }}');
+
+        // map column name -> index
+        const colIndex = {};
+
+        header.forEach((col, idx) => {
+            colIndex[col] = idx;
+        });
+
+        // extract rows without header
+        return dataRaw.slice(1).map(row => {
+
+            const cols = row.split('{{ site.ws_csv_delimiter }}');
+
+            return (tableRespCols != undefined && tableRespCols[tablePos].length > 0)? tableRespCols[tablePos].map(colName => {
+                const idx = colIndex[colName];
+
+                return idx !== undefined ? cols[idx] : '';
+            }):row.split('{{ site.ws_csv_delimiter }}'); ;
+
+        });
+    };
 
     // function to update DataTable with query string, page.wsDatatablePath is needed.
     var dtUpdate = function (tablePos, queryString) {
@@ -37,17 +62,9 @@
         })
             .then(response => response.json())
             .then(dataRaw => {
-                dataRaw.shift(); // remove header
-                console.log('dataRaw retrieved:', dataRaw, dataRaw.length);
-                const n = tableCols[tablePos].length; // number of columns to extract
-                const extractCols = dataRaw.map(row => {
-                    const parts = row.split('{{ site.ws_csv_delimiter }}');
-                    return parts.slice(0,n).map(p => p.trim()).join('{{ site.ws_csv_delimiter }}');
-                });
-
-                let data = dataRaw.map(function (item) {
-                    return item.split('{{ site.ws_csv_delimiter }}'); // wrap each string in an array
-                });
+                // console.log('dataRaw retrieved:', dataRaw, dataRaw.length);
+                let data = extractData(dataRaw, tablePos);
+                console.log('Extracted data:', data, data.length);
                 let table = new DataTable('#' + tableIds[tablePos]);
                 table.clear(); // Clear existing data
                 table.rows.add(data); // Add new data
@@ -58,17 +75,33 @@
         }; // dtUpdate
 
 
-    if ('{{ page.wsDatatableAutoLoad }}' == 'true') {
-        console.log('Auto-loading DataTable with initial data... {{ page.url}} {{ page.wsDatatableAutoLoad }}');
-        {% for tablePos in (0..page.wsDatatableIds.size) %}
-        dtUpdate({{ tablePos }},''); // initial load with empty query string
-        {% endfor %}
-    }
     $(document).ready(function () {
-        console.log('DataTables document ready');
+        {% assign n = page.wsDatatableIds.size | minus: 1 %}
+        if ('{{ page.wsDatatableAutoLoad }}' == 'true') {
+            console.log('Auto-loading DataTable with initial data... {{ page.url}} {{ page.wsDatatableAutoLoad }}');
+            {% for tablePos in (0..n) %}
+                dtUpdate({{ tablePos }},''); // initial load with empty query string
+            {% endfor %}
+        }
+        console.log('DataTables document ready, applying styles to...');
         // TODO: autoload data per table
         // let dtRun = $('#dTable').data('dt-run');
         // if (dtRun != undefined && !dtRun) return;
+        let dtStyle = ""; 
+        {% for tablePos in (0..n) %}
+            dtStyle = $('#' + tableIds[{{tablePos}}]).data('dt-style');
+            console.log("tableId: ", tableIds[{{tablePos}}], "dtStyle: ", dtStyle);
+            if (dtStyle == "basic") {
+                new DataTable('#' + tableIds[{{tablePos}}], {
+                    info: false,
+                    ordering: false,
+                    layout: {
+                        topEnd: null
+                    },
+                    paging: false
+                });
+            } // basic style
+        {% endfor %}
     });
 </script>
 

@@ -11,8 +11,12 @@ footer-extra: dtable-init.html
 comments: false
 wsDatatableIds: [ issuer_details, certs_list ]
 wsDatatableCols: [
-  ['Specializations', 'Headquarters', 'Rating', 'Website'],
+  ['Website','Specializations', 'Headquarters', 'Rating'],
   ['ISIN','Issuer','Name','Composition','Issued','Expires','Currency','Coupon','Type']
+]
+wsDatatableRespCols: [
+  ['website','specialization', 'geo_region', 'issuer_rating_class'],
+  []
 ]
 wsDatatablePaths: [ /issuers/marex, /certificates/*?issuer=marex ]
 wsDatatableAutoLoad: true
@@ -24,7 +28,7 @@ wsDatatableAutoLoad: true
 </p>
 </div>
 <div>
-{% include dtable-th.html tablePos=0 %}
+{% include dtable-th.html tablePos=0 tableStyle="basic" %}
 </div>
 <div>
 <h2>{{ site.issuers_par1_title }}</h2>
