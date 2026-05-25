@@ -139,5 +139,37 @@
         Plotly.react('plotlyid', plotData, layout, {displayModeBar: false});
         Plotly.Plots.resize('plotlyid');
     };
+
+
+    // RADAR CHART
+    const drawRadarPlotly = (radarId, rawData) => {
+        const dimensions = ['Usability','Exhaustiveness','Clarity', 'Accuracy', 'Searchability', 'Usability'];
+       
+        let data = [];
+        for (let i = 0; i < rawData.length; i++) {
+            data.push({
+                type: 'scatterpolar',
+                r: rawData[i].r,
+                theta: dimensions,
+                fill: 'toself',
+                name: rawData[i].name
+            });
+        };
+
+        layout = {
+        polar: {
+            radialaxis: {
+            visible: true,
+            range: [0, 5]
+            }
+        }
+        }
+
+        Plotly.newPlot(radarId, data, layout, {displayModeBar: false});
+
+    };
+
+    // auto-draw by using page properties
+    if (radarRawData) drawRadarPlotly( '{{ page.radarId }}', radarRawData);
 </script>
 {%- endif %}

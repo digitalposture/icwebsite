@@ -1,0 +1,52 @@
+---
+layout: page
+title:  "Mediobanca"
+date:   2026-02-24 17:26:40 +0100
+categories: issuers
+cover-img: /assets/img/path.jpg
+thumbnail-img: /assets/img/thumb.png
+share-img: /assets/imgs/logos/mediobanca.svg
+ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
+footer-extra: dtable-init.html
+comments: false
+wsDatatableIds: [ issuer_details, certs_list ]
+wsDatatableCols: [
+  ['Website','Specializations', 'Headquarters', 'Rating'],
+  ['ISIN','Issuer','Name','Composition','Issued','Expires','Currency','Coupon','Type']
+]
+wsDatatableRespCols: [
+  ['website','specialization', 'geo_region', 'issuer_rating_class'],
+  []
+]
+wsDatatablePaths: [ /issuers/mediobanca, /certificates/*?issuer=mediobanca ]
+wsDatatableAutoLoad: true
+---
+<div>
+<p>
+  <img src="/assets/imgs/logos/mediobanca.svg" width="200">
+ <b>Mediobanca Certificates</b> is the structured products division of Mediobanca focused on issuing and managing investment certificates and securitized derivatives for retail and professional investors.
+</p>
+</div>
+<div>
+{% include dtable-th.html tablePos=0 tableStyle="basic" %}
+</div>
+<div>
+<h2>{{ site.issuers_par1_title }}</h2>
+The website provides clear information regarding: 
+- calendar, 
+- coupon ex-date, 
+- levels and barriers
+
+**Score**: 3/5
+</div>
+<div>
+<h2>{{ site.issuers_par2_title }}</h2>
+{{ site.issuers_par2_content }}
+Note: If you would like to add your own certificate, please send us a [message](../request)
+</div>
+<div>
+<!--  /certificates?issuer=[issuer] -->
+
+<!-- <table id="dTable" data-dt-path="/certificates/{{page.slug}}"> -->
+{% include dtable-th.html tablePos=1 %}
+</div>
