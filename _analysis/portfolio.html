@@ -27,7 +27,7 @@ wsDatatablePaths: [
 <ul class="nav nav-tabs" id="portfolioTabs" role="tablist">
   <li class="nav-item active">
     <a class="nav-link active" id="info-tab" data-toggle="tab" href="#infoPane" role="tab">
-      General
+      Portfolio
     </a>
   </li>
 
@@ -38,8 +38,14 @@ wsDatatablePaths: [
   </li>
 
   <li class="nav-item">
+    <a class="nav-link" id="table-tab" data-toggle="tab" href="#underlyingsPane" role="tab">
+      Underlyings
+    </a>
+  </li>
+
+  <li class="nav-item">
     <a class="nav-link" id="table-tab" data-toggle="tab" href="#tablePane" role="tab">
-      Table
+      Certificate Details
     </a>
   </li>
 </ul>
@@ -84,6 +90,11 @@ wsDatatablePaths: [
         <button id="btnSwap" class="btn btn-secondary">Swap Certs ↔ Tickers</button>
         {% include error-box.html errorBoxId="errorBoxForSwap" %}
       </div>
+
+  </div>
+
+    <!-- Underlyings tab -->
+  <div class="tab-pane fade" id="underlyingsPane" role="tabpanel">
 
        {% include dtable-th.html tablePos=1 %}
 
