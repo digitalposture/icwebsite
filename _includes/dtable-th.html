@@ -4,7 +4,7 @@
 {% assign tableCols = page.wsDatatableCols[tablePos] %}
 
 {% if tableId && tableCols %}
-<table id="{{ tableId }}" class="styled-table" data-dt-path="" data-dt-run="false" data-dt-style="{{ tableStyle }}">
+<table id="{{ tableId }}" class="stripe" data-mdt-path="" data-mdt-run="false" data-mdt-style="{{ tableStyle }}">
     <thead>
         <tr>{% for col in tableCols %}<th>{{ col }}</th>{% endfor %}</tr>
     </thead>

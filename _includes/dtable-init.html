@@ -85,11 +85,11 @@
         }
         console.log('DataTables document ready, applying styles to...');
         // TODO: autoload data per table
-        // let dtRun = $('#dTable').data('dt-run');
+        // let dtRun = $('#dTable').data('mdt-run');
         // if (dtRun != undefined && !dtRun) return;
         let dtStyle = ""; 
         {% for tablePos in (0..n) %}
-            dtStyle = $('#' + tableIds[{{tablePos}}]).data('dt-style');
+            dtStyle = $('#' + tableIds[{{tablePos}}]).data('mdt-style');
             console.log("tableId: ", tableIds[{{tablePos}}], "dtStyle: ", dtStyle);
             if (dtStyle == "basic") {
                 new DataTable('#' + tableIds[{{tablePos}}], {

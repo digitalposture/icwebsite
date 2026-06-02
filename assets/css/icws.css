@@ -138,3 +138,31 @@ h1 {
 .styled-table tbody tr:hover {
   background: #f9fafb;
 }
+
+/* overrride JK B styles */
+
+table {
+}
+table tr {
+}
+table tr:nth-child(2n) {
+}
+table tr th,
+table tr td {
+  border: 0px solid gray;
+  padding: 0.0rem 0.0rem;
+}
+table tr th {
+  font-weight: normal;
+}
+table tr th :first-child,
+table tr td :first-child {
+}
+table tr th :last-child,
+table tr td :last-child {
+}
+
+:root {
+  --body-font: 'Roboto', 'Times New Roman', serif;
+  /* --body-font: 16px/25px system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans","Liberation Sans",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important */
+}

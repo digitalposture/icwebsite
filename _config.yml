@@ -53,7 +53,9 @@ plugins:
   - jekyll-feed
   - jekyll-remote-theme
 
-site-css: "/assets/css/icws.css"
+site-css: 
+- "/assets/css/icws.css"
+# - "https://cdn.datatables.net/2.3.8/css/dataTables.dataTables.css"
 # site-js: "/assets/js/icws.js"
 remote_theme: daattali/beautiful-jekyll@6.0.1
 

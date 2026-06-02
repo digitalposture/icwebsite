@@ -6,17 +6,17 @@ categories: issuers
 cover-img: /assets/img/path.jpg
 thumbnail-img: /assets/img/thumb.png
 share-img: /assets/imgs/logos/marex group.jpg
-ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
+ext-css: //cdn.datatables.net/2.3.8/css/dataTables.dataTables.min.css
 footer-extra: [plotly-init.html, dtable-init.html]
 comments: false
 wsDatatableIds: [ issuer_details, certs_list ]
 wsDatatableCols: [
   ['Website','Specializations', 'Headquarters', 'Rating'],
-  ['ISIN','Issuer','Name','Composition','Issued','Expires','Currency','Coupon','Type']
+  ['ISIN','Issuer','Name','Type','Issued','Expires','Currency','Coupon','Coupon Type']
 ]
 wsDatatableRespCols: [
   ['website','specialization', 'geo_region', 'issuer_rating_class'],
-  []
+   ['isin','issuer','name','certificate_type_tags','issue_date','rembursement_date','currency','coupon_amount','coupon_type']
 ]
 wsDatatablePaths: [ /issuers/marex, /certificates/*?issuer=marex ]
 wsDatatableAutoLoad: true
@@ -40,6 +40,24 @@ The website provides clear information regarding:
 - levels and barriers
 
 <div id="{{ page.radarId }}"></div>
+<script>
+     radarRawData = [
+            {
+                name: 'Marex Group',
+                r: [3, 3, 4, 3, 5, 3],
+            },
+            // {
+            //     name: 'Group B',
+            //     r: [2, 4, 3, 1, 5, 2],
+            // },
+            // {
+            //     name: 'Group C',
+            //     r: [2, 1, 5, 2, 3, 2],
+            // }
+        ];
+</script>
+
+
 </div>
 <div>
 <h2>{{ site.issuers_par2_title }}</h2>
@@ -51,23 +69,7 @@ Note: If you would like to add your own certificate, please send us a [message](
 
 <!--  /certificates?issuer=[issuer] -->
 
-<!-- <table id="dTable" data-dt-path="/certificates/{{page.slug}}"> -->
+<!-- <table id="dTable" data-mdt-path="/certificates/{{page.slug}}"> -->
 {% include dtable-th.html tablePos=1 %}
 </div>
 
-<script>
-     radarRawData = [
-            {
-                name: 'Group A',
-                r: [1, 3, 4, 3, 5, 1],
-            },
-            {
-                name: 'Group B',
-                r: [2, 4, 3, 1, 5, 2],
-            },
-            {
-                name: 'Group C',
-                r: [2, 1, 5, 2, 3, 2],
-            }
-        ];
-</script>

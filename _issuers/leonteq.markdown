@@ -30,6 +30,6 @@ Note: If you would like to add your own certificate, please send us a [message](
 <div>
 <!--  /certificates?issuer=[issuer] -->
 
-<!-- <table id="dTable" data-dt-path="/certificates/{{page.slug}}"> -->
+<!-- <table id="dTable" data-mdt-path="/certificates/{{page.slug}}"> -->
 {% include dtable-th.html tablePos=0 %}
 </div>

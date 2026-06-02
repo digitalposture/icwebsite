@@ -8,7 +8,12 @@ footer-extra: dtable-init.html
 comments: false
 wsDatatableIds: [ certs_list ]
 wsDatatableCols: [
-  ['ISIN','Issuer','Name','Composition','Issued','Expires','Currency','Coupon','Type']
+  ['Website','Specializations', 'Headquarters', 'Rating'],
+  ['ISIN','Issuer','Name','Type','Issued','Expires','Currency','Coupon','Coupon Type']
+]
+wsDatatableRespCols: [
+  ['website','specialization', 'geo_region', 'issuer_rating_class'],
+   ['isin','issuer','name','certificate_type_tags','issue_date','rembursement_date','currency','coupon_amount','coupon_type']
 ]
 wsDatatablePaths: [/certificates/*?issuer=bnp]
 wsDatatableAutoLoad: true
@@ -30,6 +35,6 @@ Note: If you would like to add your own certificate, please send us a [message](
 <div>
 <!--  /certificates?issuer=[issuer] -->
 
-<!-- <table id="dTable" data-dt-path="/certificates/{{page.slug}}"> -->
+<!-- <table id="dTable" data-mdt-path="/certificates/{{page.slug}}"> -->
 {% include dtable-th.html tablePos=0 %}
 </div>
