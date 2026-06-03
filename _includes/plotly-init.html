@@ -170,6 +170,6 @@
     };
 
     // auto-draw by using page properties
-    if (radarRawData) drawRadarPlotly( '{{ page.radarId }}', radarRawData);
+    if (window.radarRawData !== undefined) drawRadarPlotly( '{{ page.radarId }}', radarRawData);
 </script>
 {%- endif %}

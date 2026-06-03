@@ -142,6 +142,7 @@ h1 {
 /* overrride JK B styles */
 
 table {
+  font-size: 12px;
 }
 table tr {
 }
@@ -163,6 +164,14 @@ table tr td :last-child {
 }
 
 :root {
-  --body-font: 'Roboto', 'Times New Roman', serif;
-  /* --body-font: 16px/25px system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans","Liberation Sans",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important */
+  --body-font: 16px/25px system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans","Liberation Sans",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important */
+}
+
+body {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.dt-layout-cell {
+  font-size: 11px;
 }

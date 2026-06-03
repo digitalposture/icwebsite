@@ -71,8 +71,6 @@ navbar-links:
     - Vontobel: "issuers/vontobel"
     - Leonteq: "issuers/leonteq"
     - Request: "issuers/request"
-  Quotes: 
-    - By ISIN: "quotes/by-isin"
   Search: 
     - By Ticker: "analysis/by-ticker"
     - By Value: "analysis/by-value"

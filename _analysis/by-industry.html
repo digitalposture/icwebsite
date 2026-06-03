@@ -3,16 +3,51 @@ layout: page
 full-width: true
 title: Certificate Analysis by Industry
 subtitle: How a single industry can influence your portfolio
-footer-extra: [plotly-init.html, select-init.html]
+footer-extra: [plotly-init.html, select-init.html, dtable-init.html]
+ext-css: //cdn.datatables.net/2.3.8/css/dataTables.dataTables.min.css
 comments: false
 hasPlot: true
 wsSelectId: criteria_select
 wsSelectPath: /certificates-tickers/*
-wsSelectValPos: 5
-wsSelectTextPos: 5
+wsSelectValPos: 6
+wsSelectTextPos: 6
+wsDatatableIds: [
+  'tickers_table'
+]
+wsDatatableCols: [
+  ['ISIN', 'Name', 'Stock Name', 'Stock Ticker', 'Industry', 'Sector']
+]
+wsDatatablePaths: [
+  '/certificates-tickers/'
+]
+wsDatatableRespCols: [
+  ['certificate_isin', 'certificate_name', 'stock_name', 'stock_google_finance_ticker', 'stock_industry', 'stock_sector']
+]
 ---
 <div class="tool-container">
-
+  <!-- Header -->
+  <div class="tool-header">
+    <h3>Certificate Explorer</h3>
+    <p class="tool-description">
+      Select an industry to analyze related certificates. This tool helps you understand how a single industry can influence a set of certificates, providing insights into the connections between industries and financial instruments.
+    </p>
+    <p class="tool-description">
+      <b>How to use this tool</b>
+      <ol class="tool-description">
+        <li>Select an industry from the dropdown menu or list a set of industries (comma-separated). The list has priority over the dropdown selection.</li>
+        <li>Click the "Load Data" button.</li>
+        <li>The sankey graph will update to show the relationships between certificates and the selected industry.</li>
+        <li>The table will update to show all certificates related to the selected industry.</li>
+      </ol>
+    </p>
+        <p class="tool-description">
+      <b>When to use this tool</b>
+      <ol class="tool-description">
+        <li>You have multiple certificates in your portfolio, you read/heard a specific news about an industry so you want to see how it affects your investments.</li>
+        <li>You want to invest in a specific industry by using certificates.</li>
+      </ol>
+    </p>
+  </div>
   <!-- Chart -->
   <div class="tool-section">
     <!-- <pre class="mermaid"></pre> -->
@@ -44,9 +79,9 @@ wsSelectTextPos: 5
   </div>
 
 </div>
-<!-- multiselect to list the criteria_csv_list by lines -->
-<select id="cert_multiselect" class="tool-input" multiple size="5">
-</select>
+<div>
+  {% include dtable-th.html tablePos=0 %}
+</div>
 
 <!-- <textarea id="mm_preview" hidden></textarea> -->
 
@@ -88,17 +123,16 @@ wsSelectTextPos: 5
       .then(response => response.json())
       .then(dataRaw => {
         console.log("test::data:", dataRaw);
+        dtDraw(0,dataRaw);
         dataRaw.shift(); // remove header
         // compare selected_criteria with data at pos 5 (industry) and filter accordingly
         // const filteredData = dataRaw.filter(row => {
         //   const industry = row.split(";")[5];
         //   return industry && selected_criteria.toLowerCase().includes(industry.toLowerCase());
         // });
-        certs_ticker_data = createPlotlyData(dataRaw, 0, 5, 1, 5); // source is cert at pos 0, target is ticker at pos 3
+        certs_ticker_data = createPlotlyData(dataRaw, 0, 6, 1, 6); // source is cert at pos 0, target is ticker at pos 3
         console.log("test::dataRaw:", dataRaw);
         drawPlotly(certs_ticker_data, swapSwitch);
-        //render('source-to-target');
-
       });
   }; // .btnPrimary::onclick
 </script>

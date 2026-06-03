@@ -48,8 +48,22 @@
         });
     };
 
+    var dtDraw = function (tablePos, dataRaw) {
+        let data = extractData(dataRaw, tablePos);
+        console.log('Extracted data:', data, data.length);
+        let table = new DataTable('#' + tableIds[tablePos]);
+        table.clear(); // Clear existing data
+        table.rows.add(data); // Add new data
+        table.draw(); // Redraw the table to reflect the new data
+        console.log('Datatable drawn:', data.length, data);
+    };
+
     // function to update DataTable with query string, page.wsDatatablePath is needed.
     var dtUpdate = function (tablePos, queryString) {
+        if (queryString == "N/A") {
+            let table = new DataTable('#' + tableIds[tablePos]);
+            return;
+        }
         const urlPath = tablePaths[tablePos] + queryString;
         console.log('==> Calling... {{ site.wsUrl }}' + urlPath)
         var secret = "{{ site.wsSecret }}";
@@ -63,19 +77,20 @@
             .then(response => response.json())
             .then(dataRaw => {
                 // console.log('dataRaw retrieved:', dataRaw, dataRaw.length);
-                let data = extractData(dataRaw, tablePos);
-                console.log('Extracted data:', data, data.length);
-                let table = new DataTable('#' + tableIds[tablePos]);
-                table.clear(); // Clear existing data
-                table.rows.add(data); // Add new data
-                table.draw(); // Redraw the table to reflect the new data
-                console.log('Certificates data loaded:', data.length, data);
+                // let data = extractData(dataRaw, tablePos);
+                // console.log('Extracted data:', data, data.length);
+                // let table = new DataTable('#' + tableIds[tablePos]);
+                // table.clear(); // Clear existing data
+                // table.rows.add(data); // Add new data
+                // table.draw(); // Redraw the table to reflect the new data
+                dtDraw(tablePos, dataRaw);
             })
             .catch (error => console.error('Error fetching certificates:', error));
         }; // dtUpdate
 
 
     $(document).ready(function () {
+        console.log('DataTables READY...');
         {% assign n = page.wsDatatableIds.size | minus: 1 %}
         if ('{{ page.wsDatatableAutoLoad }}' == 'true') {
             console.log('Auto-loading DataTable with initial data... {{ page.url}} {{ page.wsDatatableAutoLoad }}');
@@ -100,7 +115,9 @@
                     },
                     paging: false
                 });
-            } // basic style
+            } else {
+                new DataTable('#' + tableIds[{{tablePos}}]); // init just to avoid flat table format
+            }
         {% endfor %}
     });
 </script>

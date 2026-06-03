@@ -2,7 +2,7 @@
 layout: page
 full-width: true
 title: Certificates Analysis by Market Value
-subtitle: Discover what certificates are sold for less than their par (face) value. 
+subtitle: Discover how certificates are performing and their current value. Data is refreshed each 8 hours Berlin office time.
 intro: Buying investment certificates issued below par (at a discount) is attractive primarily because it increases the potential yield and provides a built-in capital gain at maturity.
 ext-css: //cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css
 footer-extra: dtable-init.html
@@ -12,7 +12,7 @@ wsDatatableIds: [
   'details_table'
 ]
 wsDatatableCols: [
-  ['ISIN', 'Issuer', 'Name', 'Coupon','Ex-Date', 'Ask', 'Bid', 'Growth_1D' , 'Growth_3D', 'Growth_1W', 'Growth_2W', 'Growth_4W']
+  ['ISIN', 'Issuer', 'Name', 'Coupon','Ex-Date', 'Ask', 'Bid', '1 Day' , '3 Days', '1 Week', '2 Weeks', '4 Weeks']
 ]
 wsDatatablePaths: [
   /certificates-growth/*
@@ -30,6 +30,23 @@ wsDatatablePaths: [
     <h3>Certificate Explorer</h3>
     <p class="tool-description">
       Select criterias to search for certificates and analyze the results.
+    </p>
+        <p class="tool-description">
+      <b>How to use this tool</b>
+      <ol class="tool-description">
+        <li>Select a market value criteria.</li>
+        <li>Select a growth criteria.</li>
+        <li>Click the search button.</li>
+        <li>The table will update to show all certificates related to the selected criteria.</li>
+      </ol>
+    </p>
+        <p class="tool-description">
+      <b>When to use this tool</b>
+      <ol class="tool-description">
+        <li>You want to add certificates to your portfolio waiting for the right market conditions.</li>
+        <li>You want to select certificates based on their market value and coupon rate.</li>
+        <li>You want to select certificates when they are below their par value and coupon ex-date is close.</li>
+      </ol>
     </p>
   </div>
 
@@ -89,6 +106,7 @@ document.getElementById('btnPrimary').addEventListener('click', function() {
         ErrorBox.show("Please select at least one criteria for growth or market value.", "errorBoxForLoad");
     }
 });
+
 </script>
 
 

@@ -4,6 +4,7 @@ full-width: true
 title: Portfolio Analysis
 subtitle: How a single company can influence your portfolio
 footer-extra: [plotly-init.html, select-init.html, dtable-init.html]
+ext-css: //cdn.datatables.net/2.3.8/css/dataTables.dataTables.min.css
 comments: false
 hasPlot: true
 wsSelectId: cert_select
@@ -22,7 +23,36 @@ wsDatatablePaths: [
   '/certificates/',
   '/certificates-tickers/'
 ]
+wsDatatableRespCols: [
+[],
+  ['certificate_isin', 'certificate_name', 'stock_name', 'stock_google_finance_ticker', 'stock_industry', 'stock_sector'],
+]
 ---
+<div class="tool-container">
+  <!-- Header -->
+  <div class="tool-header">
+    <p class="tool-description">
+      Select a certificate to analyze related underlyings. This tool helps you understand how a single industry can influence a set of certificates, providing insights into the connections between industries and financial instruments.
+    </p>
+    <p class="tool-description">
+      <b>How to use this tool</b>
+      <ol class="tool-description">
+        <li>Select a certificate from the dropdown menu or paste a list of ISINs. The list has priority over the dropdown selection.</li>
+        <li>Click the "Load Data" button.</li>
+        <li>The sankey graph will update to show the relationships between certificates and underlyings.</li>
+        <li>The table in Underlyings will update to show all underlyings related to the selected certificates.</li>
+        <li>The table in Certificate Details will update to show further details.</li>
+      </ol>
+    </p>
+        <p class="tool-description">
+      <b>When to use this tool</b>
+      <ol class="tool-description">
+        <li>You have multiple certificates in your portfolio, you want to analyze their underlying assets and exposure.</li>
+        <li>You want to invest in a specific set of certificates with no overlap.</li>
+      </ol>
+    </p>
+  </div>
+  </div>
 <!-- Tabs -->
 <ul class="nav nav-tabs" id="portfolioTabs" role="tablist">
   <li class="nav-item active">
@@ -143,9 +173,11 @@ wsDatatablePaths: [
       return;
     }
 
+    let validIsisns = ErrorBox.validateIsinList(cert_isins, "errorBoxForLoad");
+
     console.log("Selected certs: ", '{{ site.wsUrl }}/certificates-tickers/', cert_isins);
     var secret = "{{ site.wsSecret }}";
-    fetch('{{ site.wsUrl }}/certificates-tickers/' + cert_isins, {
+    fetch('{{ site.wsUrl }}/certificates-tickers/' + validIsisns, {
       method: "GET",
       headers: {
         "Content-Type": "text/plain",

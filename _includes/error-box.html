@@ -44,9 +44,53 @@ window.ErrorBox ??= (function () {
         }
     }
 
+ function isValidISINFormat(isin) {
+        return /^[A-Z]{2}[A-Z0-9]{9}[0-9]$/.test(
+            String(isin).trim().toUpperCase()
+        );
+    }
+
+    function splitIsins(csvString) {
+        const valid = [];
+        const invalid = [];
+
+        String(csvString)
+            .split(',')
+            .map(x => x.trim().toUpperCase())
+            .filter(Boolean)
+            .forEach(isin => {
+                if (isValidISINFormat(isin)) {
+                    valid.push(isin);
+                } else {
+                    invalid.push(isin);
+                }
+            });
+
+        return {
+            validIsins: valid.join(','),
+            invalidIsins: invalid.join(',')
+        };
+    }
+    function validateIsinList(isinList, boxId = 'errorBox', autoClearMs = 10000) {
+        const { validIsins, invalidIsins } = splitIsins(isinList);
+
+        if (invalidIsins) {
+            show(
+                `The following ISIN(s) seems to be invalid: ${invalidIsins}`,
+                boxId,
+                autoClearMs
+            );
+        }
+
+        return validIsins;
+    }
+
     return {
         show,
-        clear
+        clear,
+        isValidISINFormat,
+        splitIsins,
+        validateIsinList
     };
 
 })();
