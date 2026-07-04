@@ -15,7 +15,7 @@ wsDatatableRespCols: [
   ['website','specialization', 'geo_region', 'issuer_rating_class'],
    ['isin','issuer','name','certificate_type_tags','issue_date','rembursement_date','currency','coupon_amount','coupon_type']
 ]
-wsDatatablePaths: [/certificates/*?issuer=bnp]
+wsDatatablePaths: [/details/*?issuer=bnp]
 wsDatatableAutoLoad: true
 ---
 {{ page.title}} is...
@@ -35,6 +35,6 @@ Note: If you would like to add your own certificate, please send us a [message](
 <div>
 <!--  /certificates?issuer=[issuer] -->
 
-<!-- <table id="dTable" data-mdt-path="/certificates/{{page.slug}}"> -->
+<!-- <table id="dTable" data-mdt-path="/details/{{page.slug}}"> -->
 {% include dtable-th.html tablePos=0 %}
 </div>

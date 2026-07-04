@@ -6,7 +6,7 @@ footer-extra: [plotly-init.html, select-init.html, dtable-init.html]
 comments: false
 hasPlot: true
 wsSelectId: cert_select
-wsSelectPath: /certificates-tickers/*
+wsSelectPath: /tickers/*
 wsSelectValPos: 0
 wsSelectTextPos: 1
 ---
@@ -82,9 +82,9 @@ wsSelectTextPos: 1
     // if (cert_isins == "") 
     //   cert_isins = document.getElementById('cert_select').value;
 
-    console.log("Selected certs: ", '{{ site.wsUrl }}/certificates-tickers/', cert_isins);
+    console.log("Selected certs: ", '{{ site.wsUrl }}/tickers/', cert_isins);
     var secret = "{{ site.wsSecret }}";
-    fetch('{{ site.wsUrl }}/certificates-tickers/' + cert_isins, {
+    fetch('{{ site.wsUrl }}/tickers/' + cert_isins, {
       method: "GET",
       headers: {
         "Content-Type": "text/plain",

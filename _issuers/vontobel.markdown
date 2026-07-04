@@ -10,7 +10,7 @@ wsDatatableIds: [ certs_list ]
 wsDatatableCols: [
   ['ISIN','Issuer','Name','Composition','Issued','Expires','Currency','Coupon','Type']
 ]
-wsDatatablePaths: [ /certificates/*?issuer=vontobel ]
+wsDatatablePaths: [ /details/*?issuer=vontobel ]
 wsDatatableAutoLoad: true
 ---
 {{ page.title}} is...
@@ -30,6 +30,6 @@ Note: If you would like to add your own certificate, please send us a [message](
 <div>
 <!--  /certificates?issuer=[issuer] -->
 
-<!-- <table id="dTable" data-mdt-path="/certificates/{{page.slug}}"> -->
+<!-- <table id="dTable" data-mdt-path="/details/{{page.slug}}"> -->
 {% include dtable-th.html tablePos=0 %}
 </div>

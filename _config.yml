@@ -30,7 +30,7 @@ author: Digital Posture
 
 # websvc config
 ws_csv_delimiter: ';'
-wsUrl: http://127.0.0.1:8080
+wsUrl: https://icwebsvc.digital-posture.workers.dev
 site.wsSecret: mysupersecret2026
 
 permalink: /:title/

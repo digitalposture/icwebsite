@@ -8,7 +8,7 @@ ext-css: //cdn.datatables.net/2.3.8/css/dataTables.dataTables.min.css
 comments: false
 hasPlot: true
 wsSelectId: cert_select
-wsSelectPath: /certificates-tickers/*
+wsSelectPath: /tickers/*
 wsSelectValPos: 0
 wsSelectTextPos: 1
 wsDatatableIds: [
@@ -20,8 +20,8 @@ wsDatatableCols: [
   ['ISIN', 'Name', 'Stock Name', 'Stock Ticker', 'Industry', 'Sector']
 ]
 wsDatatablePaths: [
-  '/certificates/',
-  '/certificates-tickers/'
+  '/details/',
+  '/tickers/'
 ]
 wsDatatableRespCols: [
 [],
@@ -175,9 +175,9 @@ wsDatatableRespCols: [
 
     let validIsisns = ErrorBox.validateIsinList(cert_isins, "errorBoxForLoad");
 
-    console.log("Selected certs: ", '{{ site.wsUrl }}/certificates-tickers/', cert_isins);
+    console.log("Selected certs: ", '{{ site.wsUrl }}/tickers/', cert_isins);
     var secret = "{{ site.wsSecret }}";
-    fetch('{{ site.wsUrl }}/certificates-tickers/' + validIsisns, {
+    fetch('{{ site.wsUrl }}/tickers/' + validIsisns, {
       method: "GET",
       headers: {
         "Content-Type": "text/plain",

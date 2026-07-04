@@ -8,7 +8,7 @@ ext-css: //cdn.datatables.net/2.3.8/css/dataTables.dataTables.min.css
 comments: false
 hasPlot: true
 wsSelectId: criteria_select
-wsSelectPath: /certificates-tickers/*
+wsSelectPath: /tickers/*
 wsSelectValPos: 6
 wsSelectTextPos: 6
 wsDatatableIds: [
@@ -18,7 +18,7 @@ wsDatatableCols: [
   ['ISIN', 'Name', 'Stock Name', 'Stock Ticker', 'Industry', 'Sector']
 ]
 wsDatatablePaths: [
-  '/certificates-tickers/'
+  '/tickers/'
 ]
 wsDatatableRespCols: [
   ['certificate_isin', 'certificate_name', 'stock_name', 'stock_google_finance_ticker', 'stock_industry', 'stock_sector']
@@ -111,9 +111,9 @@ wsDatatableRespCols: [
     }
     //   cert_isins = document.getElementById('criteria_select').value;
 
-    console.log("Selected criteria: ", '{{ site.wsUrl }}/certificates-tickers/*?industries=', selected_criteria);
+    console.log("Selected criteria: ", '{{ site.wsUrl }}/tickers/*?industries=', selected_criteria);
     var secret = "{{ site.wsSecret }}";
-    fetch('{{ site.wsUrl }}/certificates-tickers/*?industries=' + selected_criteria, {
+    fetch('{{ site.wsUrl }}/tickers/*?industries=' + selected_criteria, {
       method: "GET",
       headers: {
         "Content-Type": "text/plain",
