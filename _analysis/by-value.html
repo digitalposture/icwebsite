@@ -98,7 +98,7 @@ document.getElementById('btnPrimary').addEventListener('click', function() {
         // Fetch data from the API endpoint
         console.log("Selected growth and value: ", growth, value);
         // generate base64 secret for authorization header
-        // var secret = btoa("{{ site.wsSecret }}");
+        // var secret = btoa("{{ site.data.env_vars.wsSecret }}");
         dtUpdate(0, '?growth1d=' + growth + '&parvalue=' + value);
        
     } else {

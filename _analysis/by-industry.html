@@ -112,7 +112,7 @@ wsDatatableRespCols: [
     //   cert_isins = document.getElementById('criteria_select').value;
 
     console.log("Selected criteria: ", '{{ site.wsUrl }}/tickers/*?industries=', selected_criteria);
-    var secret = "{{ site.wsSecret }}";
+    var secret = "{{ site.data.env_vars.wsSecret }}";
     console.log("Secret: ", secret);
     fetch('{{ site.wsUrl }}/tickers/*?industries=' + selected_criteria, {
       method: "GET",

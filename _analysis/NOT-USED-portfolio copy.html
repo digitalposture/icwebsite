@@ -83,7 +83,7 @@ wsSelectTextPos: 1
     //   cert_isins = document.getElementById('cert_select').value;
 
     console.log("Selected certs: ", '{{ site.wsUrl }}/tickers/', cert_isins);
-    var secret = "{{ site.wsSecret }}";
+    var secret = "{{ site.data.env_vars.wsSecret }}";
     fetch('{{ site.wsUrl }}/tickers/' + cert_isins, {
       method: "GET",
       headers: {

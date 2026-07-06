@@ -176,7 +176,7 @@ wsDatatableRespCols: [
     let validIsisns = ErrorBox.validateIsinList(cert_isins, "errorBoxForLoad");
 
     console.log("Selected certs: ", '{{ site.wsUrl }}/tickers/', cert_isins);
-    var secret = "{{ site.wsSecret }}";
+    var secret = "{{ site.data.env_vars.wsSecret }}";
     fetch('{{ site.wsUrl }}/tickers/' + validIsisns, {
       method: "GET",
       headers: {

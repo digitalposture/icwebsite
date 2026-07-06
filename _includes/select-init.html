@@ -4,7 +4,7 @@
 {% if page.wsSelectId %}
 
 <script>
-// Usage: const updateSelectOptions = createSelectUpdater({ wsUrl: '{{ site.wsUrl }}', wsSecret: '{{ site.wsSecret }}' });
+// Usage: const updateSelectOptions = createSelectUpdater({ wsUrl: '{{ site.wsUrl }}', wsSecret: '{{ site.data.env_vars.wsSecret }}' });
 const createSelectUpdater = ({ wsUrl, wsSecret }) => {
     // function to populate select options. Usage: updateSelectOptions('select_id', 'select_path', valPos, textPos)
     return function updateSelectOptions(select_id, select_path, valPos, textPos) {
@@ -85,7 +85,7 @@ if (typeof wsSelectId !== 'undefined' && typeof wsSelectPath !== 'undefined') {
     console.log('Loading Data for Select Options: {{ site.wsUrl }}', wsSelectId, wsSelectPath, wsSelectValPos, wsSelectTextPos);
     const updateSelectOptions = createSelectUpdater({
         wsUrl: '{{ site.wsUrl }}',
-        wsSecret: '{{ site.wsSecret }}'
+        wsSecret: '{{ site.data.env_vars.wsSecret }}'
     });
     updateSelectOptions(wsSelectId, wsSelectPath, parseInt(wsSelectValPos), parseInt(wsSelectTextPos));
 }
