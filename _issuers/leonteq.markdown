@@ -10,7 +10,7 @@ wsDatatableIds: [ certs_list ]
 wsDatatableCols: [
   ['ISIN','Issuer','Name','Composition','Issued','Expires','Currency','Coupon','Type']
 ]
-wsDatatablePaths: [ /details/*?issuer=leont ]
+wsDatatablePaths: [ '/details/*?issuer=leont' ]
 wsDatatableAutoLoad: true
 ---
 {{ page.title}} is...
