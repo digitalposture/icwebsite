@@ -113,6 +113,7 @@ wsDatatableRespCols: [
 
     console.log("Selected criteria: ", '{{ site.wsUrl }}/tickers/*?industries=', selected_criteria);
     var secret = "{{ site.wsSecret }}";
+    console.log("Secret: ", secret);
     fetch('{{ site.wsUrl }}/tickers/*?industries=' + selected_criteria, {
       method: "GET",
       headers: {

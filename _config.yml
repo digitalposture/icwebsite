@@ -31,7 +31,7 @@ author: Digital Posture
 # websvc config
 ws_csv_delimiter: ';'
 wsUrl: https://icwebsvc.digital-posture.workers.dev
-site.wsSecret: mysupersecret2026
+wsSecret: mysupersecret2026
 
 permalink: /:title/
 
