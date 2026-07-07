@@ -68,9 +68,13 @@ navbar-links:
   Issuers:
     - BNP: "issuers/bnp"
     - Marex: "issuers/marex"
-    - Vontobel: "issuers/vontobel"
+    - Mediobanca: "issuers/mediobanca"
     - Leonteq: "issuers/leonteq"
     - Request: "issuers/request"
+    - Vontobel: "issuers/vontobel"
+    - Unicredit: "issuers/unicredit"
+    - Citigroup: "issuers/citigroup"
+    - Barclays: "issuers/barclays"
   Search: 
     - By Ticker: "analysis/by-ticker"
     - By Value: "analysis/by-value"
