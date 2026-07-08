@@ -25,9 +25,9 @@ hasPlot: true
 radarId: pRadar
 ---
 <div>
-<p>
-  <img src="/assets/imgs/logos/mediobanca.svg" width="200">
-  <b>Mediobanca</b> is an Italian investment bank specializing in structured investment products. Founded in 1946, Mediobanca has established itself as a leading provider of innovative investment solutions for retail and institutional clients. The company offers a wide range of products, including structured notes, certificates, and investment funds, with a focus on customization and flexibility to meet the specific needs of its clients. Mediobanca operates through a network of partnerships with banks, asset managers, and other financial institutions, providing them with access to its proprietary technology platform and product suite. The company is headquartered in Milan and is listed on the Italian Stock Exchange.
+<p class="img-text-container">
+  <img src="/assets/imgs/logos/mediobanca.svg" class="img-image">
+ <strong>{{ page.title }}</strong> are structured investment products issued by Mediobanca – Banca di Credito Finanziario S.p.A., designed to offer investors tailored exposure to equity indices, single stocks and other underlyings with defined payoff profiles. Through ranges such as Bonus, Phoenix, Express, Twin Win and Protection, Mediobanca Certificates combine conditional capital protection, potential coupons and diversified risk/return profiles, making them suitable for different market views (bullish, neutral or moderately bearish). The certificates are listed primarily on EuroTLX (segment Cert-X) and other Italian trading venues, providing secondary market liquidity and transparent pricing. Each product is governed by a base prospectus and final terms, with key information documents (KIDs) detailing risks, costs and performance scenarios, allowing retail and professional investors to compare structures and align them with their portfolio objectives.
 </p>
 </div>
 <div>
@@ -35,28 +35,15 @@ radarId: pRadar
 </div>
 <div>
 <h2>{{ site.issuers_par1_title }}</h2>
-The website provides clear information regarding: 
-<ul>
-  <li>calendar</li>
-  <li>coupon ex-date</li>
-  <li>levels and barriers</li>
-</ul>
+The <a href="/acued-scoring-framework/">ACUED scoring framework</a> evaluates the {{ page.title }} website across five dimensions: Accuracy, Clarity, User Experience, Exhaustiveness, and Discoverability. Each dimension is scored on a scale of 1 to 5, with 5 representing the highest level of performance. The radar chart below visualizes the scores for each dimension, providing a clear overview of the website's strengths and areas for improvement.
 
 <div id="{{ page.radarId }}"></div>
 <script>
      radarRawData = [
             {
-                name: 'Mediobanca',
-                r: [3, 3, 4, 3, 5, 3],
-            },
-            // {
-            //     name: 'Group B',
-            //     r: [2, 4, 3, 1, 5, 2],
-            // },
-            // {
-            //     name: 'Group C',
-            //     r: [2, 1, 5, 2, 3, 2],
-            // }
+                name: '"{{ page.title | jsonify }}"',
+                r: [4, 3, 4, 3, 2, 4],
+            }
         ];
 </script>
 
@@ -65,7 +52,7 @@ The website provides clear information regarding:
 <div>
 <h2>{{ site.issuers_par2_title }}</h2>
 {{ site.issuers_par2_content }}
-<b>Note:</b> If you would like to add your own certificate, please send us a <a href='../request'>message</a>
+<br/><strong>Note:</strong> If you would like to add your own certificate, please send us a <a href='../request'>message</a>
 </div>
 <div>
 

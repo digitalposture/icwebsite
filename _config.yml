@@ -64,17 +64,19 @@ remote_theme: daattali/beautiful-jekyll@6.0.1
 ###############################################
 
 navbar-links:
-  About Us: "about-us"
+  About: 
+    - About Us: "about-us"
+    - ACUED Scoring Framework: "acued-scoring-framework"
   Issuers:
     - BNP: "issuers/bnp"
     - Marex: "issuers/marex"
     - Mediobanca: "issuers/mediobanca"
     - Leonteq: "issuers/leonteq"
-    - Request: "issuers/request"
     - Vontobel: "issuers/vontobel"
     - Unicredit: "issuers/unicredit"
     - Citigroup: "issuers/citigroup"
     - Barclays: "issuers/barclays"
+    - Request: "issuers/request"
   Search: 
     - By Ticker: "analysis/by-ticker"
     - By Value: "analysis/by-value"

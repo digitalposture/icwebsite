@@ -25,38 +25,24 @@ hasPlot: true
 radarId: pRadar
 ---
 <div>
-<p>
-  <img src="/assets/imgs/logos/barclays.svg" width="100">
-  <b>Barclays PLC</b> is a British multinational investment bank and financial services company. Founded in 1690, Barclays has established itself as a leading provider of innovative financial solutions for retail and institutional clients. The company offers a wide range of products, including investment banking, wealth management, and personal banking services, with a focus on customization and flexibility to meet the specific needs of its clients. Barclays operates through a network of partnerships with banks, asset managers, and other financial institutions, providing them with access to its proprietary technology platform and product suite. The company is headquartered in London and is listed on the London Stock Exchange.
-</p>
+<p class="img-text-container">
+  <img src="/assets/imgs/logos/barclays.png" class="img-image">
+  <strong>{{ page.title }}</strong> is a leading global financial institution headquartered in London, with a long-standing presence in investment banking, markets and structured products. Through its Structured Products and Equity Derivatives teams, Barclays designs and issues a wide range of investment and leverage certificates, including autocallable, income, capital protection and thematic tracker structures on single names, indices, baskets and custom strategies. Barclays products are listed and traded on major European exchanges and MTFs, offering transparent pricing, secondary-market liquidity and access for both retail and professional investors. The bank leverages deep expertise in equity, rates and FX, robust risk management and advanced structuring capabilities to manufacture solutions with defined risk/return profiles. Supported by detailed documentation, lifecycle servicing and digital tools, Barclays is recognized as a key issuer for investors seeking innovative, institutionally engineered structured solutions.</p>
 </div>
 <div>
 {% include dtable-th.html tablePos=0 tableStyle="basic" %}
 </div>
 <div>
 <h2>{{ site.issuers_par1_title }}</h2>
-The website provides clear information regarding: 
-<ul>
-  <li>calendar</li>
-  <li>coupon ex-date</li>
-  <li>levels and barriers</li>
-</ul>
+The <a href="/acued-scoring-framework/">ACUED scoring framework</a> evaluates the {{ page.title }} website across five dimensions: Accuracy, Clarity, User Experience, Exhaustiveness, and Discoverability. Each dimension is scored on a scale of 1 to 5, with 5 representing the highest level of performance. The radar chart below visualizes the scores for each dimension, providing a clear overview of the website's strengths and areas for improvement.
 
 <div id="{{ page.radarId }}"></div>
 <script>
      radarRawData = [
             {
-                name: 'Barclays PLC',
-                r: [3, 3, 4, 3, 5, 3],
-            },
-            // {
-            //     name: 'Group B',
-            //     r: [2, 4, 3, 1, 5, 2],
-            // },
-            // {
-            //     name: 'Group C',
-            //     r: [2, 1, 5, 2, 3, 2],
-            // }
+                name: '"{{ page.title | jsonify }}"',
+                r: [3, 3, 2, 3, 2, 3],
+            }
         ];
 </script>
 
@@ -65,7 +51,7 @@ The website provides clear information regarding:
 <div>
 <h2>{{ site.issuers_par2_title }}</h2>
 {{ site.issuers_par2_content }}
-<b>Note:</b> If you would like to add your own certificate, please send us a <a href='../request'>message</a>
+<br/><strong>Note:</strong> If you would like to add your own certificate, please send us a <a href='../request'>message</a>
 </div>
 <div>
 

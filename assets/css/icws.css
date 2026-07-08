@@ -175,3 +175,23 @@ body {
 .dt-layout-cell {
   font-size: 11px;
 }
+
+
+/* img and text alignment */
+.img-text-container {
+  overflow: hidden;
+}
+.img-image {
+  float: left;
+  margin: 0 20px 10px 0;
+  width: 200px;
+}
+
+/* Markdwon tables */
+.table-full {
+  width: 100%;
+}
+.table-full table {
+  width: 100%;
+}
+

@@ -25,9 +25,9 @@ hasPlot: true
 radarId: pRadar
 ---
 <div>
-<p>
-  <img src="/assets/imgs/logos/vontobel.jpeg" width="100">
-  <b>Vontobel AG</b> is a Swiss financial services company specializing in structured investment products. Founded in 1924, Vontobel has established itself as a leading provider of innovative investment solutions for retail and institutional clients. The company offers a wide range of products, including structured notes, certificates, and investment funds, with a focus on customization and flexibility to meet the specific needs of its clients. Vontobel operates through a network of partnerships with banks, asset managers, and other financial institutions, providing them with access to its proprietary technology platform and product suite. The company is headquartered in Zurich and is listed on the Swiss Stock Exchange.
+<p class="img-text-container">
+  <img src="/assets/imgs/logos/vontobel.jpeg" class="img-image">
+  <strong>{{ page.title }}</strong> is a Swiss investment house and one of Europe’s leading issuers of structured products, operating globally from its headquarters in Zurich. Through its Structured Investment Solutions (SIS) division, Vontobel engineers, prices and distributes a wide range of investment and leverage products, including tracker certificates, bonus structures, reverse convertibles, capital protection notes and mini futures. The SIS business has shown strong momentum, with operating income rising significantly and Vontobel maintaining its position as the number one issuer on the SIX Swiss Exchange’s structured‑products segment. The bank issued more than 40,000 listed products in the public market, supported by deep derivatives expertise, robust risk management and a focus on high‑quality manufacturing. With a heritage dating back to 1936 and a global presence across Europe, the US, Asia and the Middle East, Vontobel combines long‑term stability with product innovation, making it a key issuer for investors seeking transparent, exchange‑listed structured solutions.
 </p>
 </div>
 <div>
@@ -35,28 +35,15 @@ radarId: pRadar
 </div>
 <div>
 <h2>{{ site.issuers_par1_title }}</h2>
-The website provides clear information regarding: 
-<ul>
-  <li>calendar</li>
-  <li>coupon ex-date</li>
-  <li>levels and barriers</li>
-</ul>
+The <a href="/acued-scoring-framework/">ACUED scoring framework</a> evaluates the {{ page.title }} website across five dimensions: Accuracy, Clarity, User Experience, Exhaustiveness, and Discoverability. Each dimension is scored on a scale of 1 to 5, with 5 representing the highest level of performance. The radar chart below visualizes the scores for each dimension, providing a clear overview of the website's strengths and areas for improvement.
 
 <div id="{{ page.radarId }}"></div>
 <script>
      radarRawData = [
             {
-                name: 'Vontobel',
-                r: [3, 3, 4, 3, 5, 3],
-            },
-            // {
-            //     name: 'Group B',
-            //     r: [2, 4, 3, 1, 5, 2],
-            // },
-            // {
-            //     name: 'Group C',
-            //     r: [2, 1, 5, 2, 3, 2],
-            // }
+                name: '"{{ page.title | jsonify }}"',
+                r: [4, 3, 4, 3, 3, 4],
+            }
         ];
 </script>
 
@@ -65,7 +52,7 @@ The website provides clear information regarding:
 <div>
 <h2>{{ site.issuers_par2_title }}</h2>
 {{ site.issuers_par2_content }}
-<b>Note:</b> If you would like to add your own certificate, please send us a <a href='../request'>message</a>
+<br/><strong>Note:</strong> If you would like to add your own certificate, please send us a <a href='../request'>message</a>
 </div>
 <div>
 

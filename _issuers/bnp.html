@@ -25,9 +25,11 @@ hasPlot: true
 radarId: pRadar
 ---
 <div>
-<p>
-  <img src="/assets/imgs/logos/bnp-paribas.png" width="200">
-  <b>BNP Paribas</b> is a global financial services and commodities infrastructure company founded in 2005 in the aftermath of the collapse of Refco. Headquartered in London, the firm has evolved from a niche commodities broker into a diversified international platform offering execution, clearing, market making, hedging, liquidity, and investment solutions across commodities, foreign exchange, fixed income, equities, and derivatives markets. BNP Paribas serves institutional clients including hedge funds, banks, commodity producers, asset managers, trading houses, and professional investors through a network of more than 40 offices worldwide. The company expanded aggressively through acquisitions — notably Spectron Group, ED&F Man Capital Markets, Rosenthal Collins Group, and Winterflood Securities — helping it strengthen its presence in energy, metals, agriculture, environmental products, and electronic trading. In 2021 the company simplified its branding to “BNP Paribas,” and in 2024 it went public on NASDAQ under the ticker MRX. BNP Paribas is often described as a technology-enabled market infrastructure and liquidity provider rather than a traditional lending bank, generating revenue primarily from brokerage activity, clearing services, trading flows, spreads, and risk management solutions. Its business has benefited significantly from increased market volatility and growing demand for commodity and derivatives trading, positioning the company as an increasingly important intermediary in global financial and energy markets.
+<p class="img-text-container">
+  <img src="/assets/imgs/logos/bnp-paribas.png" class="img-image">
+  <strong>{{ page.title }}</strong> is one of Europe’s largest and most diversified financial institutions, operating across corporate and institutional banking, retail banking, and investment & protection services. Headquartered in Paris and present in more than 65 countries, the Group combines global scale with deep regional roots across France, Belgium, Italy, Luxembourg, and the broader EMEA region. Its Corporate & Institutional Banking division is a leading provider of global markets, financing, and securities services, while its retail and specialized businesses — including BNP Paribas Personal Finance, Arval, and Leasing Solutions — serve millions of clients across Europe and beyond.
+
+Through <B>BNP Paribas Issuance B.V.</B>, the Group acts as a major issuer of structured products, including certificates, notes, and warrants, distributed to private and institutional investors worldwide. The issuance vehicle is backed by BNP Paribas S.A. through robust hedging arrangements designed to manage market, credit, and operational risks associated with structured product activity. With strong capitalization, consistent profitability, and a long-standing presence in international financial markets, BNP Paribas remains a reference issuer for investors seeking stability, liquidity, and product innovation.
 </p>
 </div>
 <div>
@@ -35,19 +37,14 @@ radarId: pRadar
 </div>
 <div>
 <h2>{{ site.issuers_par1_title }}</h2>
-The website provides clear information regarding: 
-<ul>
-  <li>calendar</li>
-  <li>coupon ex-date</li>
-  <li>levels and barriers</li>
-</ul>
+The <a href="/acued-scoring-framework/">ACUED scoring framework</a> evaluates the {{ page.title }} website across five dimensions: Accuracy, Clarity, User Experience, Exhaustiveness, and Discoverability. Each dimension is scored on a scale of 1 to 5, with 5 representing the highest level of performance. The radar chart below visualizes the scores for each dimension, providing a clear overview of the website's strengths and areas for improvement.
 
 <div id="{{ page.radarId }}"></div>
 <script>
      radarRawData = [
             {
-                name: 'BNP Paribas',
-                r: [3, 3, 4, 3, 5, 3],
+                name: '"{{ page.title | jsonify }}"',
+                r: [4, 5, 5, 4, 4, 4],
             },
             // {
             //     name: 'Group B',
@@ -65,7 +62,7 @@ The website provides clear information regarding:
 <div>
 <h2>{{ site.issuers_par2_title }}</h2>
 {{ site.issuers_par2_content }}
-<b>Note:</b> If you would like to add your own certificate, please send us a <a href='../request'>message</a>
+<br/><strong>Note:</strong> If you would like to add your own certificate, please send us a <a href='../request'>message</a>
 </div>
 <div>
 
