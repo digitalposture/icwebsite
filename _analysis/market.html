@@ -1,0 +1,123 @@
+---
+layout: page
+full-width: true
+title: Certificate Analysis by Market
+subtitle: Check how the current market condition is influencing your portfolio
+footer-extra: [plotly-init.html, select-init.html, dtable-init.html]
+ext-css: //cdn.datatables.net/2.3.8/css/dataTables.dataTables.min.css
+comments: false
+hasPlot: true
+wsSelectId: criteria_select
+wsSelectPath: /tickers/*
+wsSelectValPos: 6
+wsSelectTextPos: 6
+wsDatatableIds: [
+  'tickers_table'
+]
+wsDatatableCols: [
+  ['ISIN', 'Name', 'Stock Name', 'Stock Ticker', 'Industry', 'Sector']
+]
+wsDatatablePaths: [
+  '/tickers/'
+]
+wsDatatableRespCols: [
+  ['certificate_isin', 'certificate_name', 'stock_name', 'stock_google_finance_ticker', 'stock_industry', 'stock_sector']
+]
+---
+<div class="tool-container">
+  <!-- Header -->
+  <div class="tool-header">
+    <h3>Certificate Explorer</h3>
+    <p class="tool-description">
+      Select an industry to analyze related certificates. This tool helps you understand how a single industry can influence a set of certificates, providing insights into the connections between industries and financial instruments.
+    </p>
+    <p class="tool-description">
+      <b>How to use this tool</b>
+      <ol class="tool-description">
+        <li>Select an industry from the dropdown menu or list a set of industries (comma-separated). The list has priority over the dropdown selection.</li>
+        <li>Click the "Load Data" button.</li>
+        <li>The sankey graph will update to show the relationships between certificates and the selected industry.</li>
+        <li>The table will update to show all certificates related to the selected industry.</li>
+      </ol>
+    </p>
+        <p class="tool-description">
+      <b>When to use this tool</b>
+      <ol class="tool-description">
+        <li>You have multiple certificates in your portfolio, you read/heard a specific news about an industry so you want to see how it affects your investments.</li>
+        <li>You want to invest in a specific industry by using certificates.</li>
+      </ol>
+    </p>
+  </div>
+  <!-- Chart -->
+  <div class="tool-section">
+    <!-- <pre class="mermaid"></pre> -->
+     <div id='plotlyid'><!-- Plotly chart will be drawn inside this DIV --></div>
+  </div>
+
+  <!-- Input controls -->
+  <div class="tool-section">
+    <label for="criteria_select" class="tool-label">
+      Select an industry or paste a list below:
+    </label>
+
+    <select name="criteria_select" id="criteria_select" class="tool-input">
+      <option value="">-- Choose an industry --</option>
+    </select>
+
+    <textarea id="criteria_csv_list" class="tool-input" rows="3" placeholder="Bank, Software"></textarea>
+  </div>
+
+  <!-- Actions -->
+  <div class="tool-actions">
+    <button id="btnPrimary" class="btn btn-primary">
+      Load Data
+    </button>
+    <button id="btnSwap" class="btn btn-secondary">
+      Swap Certs ↔ Tickers
+    </button>
+    {% include error-box.html errorBoxId="errorBoxForLoad" %} 
+  </div>
+
+</div>
+<div>
+  {% include dtable-th.html tablePos=0 %}
+</div>
+
+<!-- <textarea id="mm_preview" hidden></textarea> -->
+
+<script>
+
+  // button btnSwap
+  let swapSwitch = false;
+  let certs_ticker_data = [];
+
+  document.getElementById('btnSwap').onclick = function () {
+    if (certs_ticker_data && certs_ticker_data.node && certs_ticker_data.link) {
+      swapSwitch = !swapSwitch;
+      //render(swapSwitch ? 'target-to-source' : 'source-to-target');
+      drawPlotly(certs_ticker_data, swapSwitch);
+    } else {
+      ErrorBox.show("No data to swap yet.", "errorBoxForLoad");
+    }
+  }; // .btnSwap::onclick
+
+  // button btnPrimary
+  document.getElementById('btnPrimary').onclick = async function () {
+    var secret = "{{ site.data.env_vars.wsSecret }}";
+    console.log("Secret: ", secret);
+    fetch('{{ site.wsUrl }}/sunburst/latest/*', {
+      method: "GET",
+      headers: {
+        "Content-Type": "text/plain",
+        "Authorization": "Bearer " + secret
+      }
+    })
+      .then(response => response.json())
+      .then(dataRaw => {
+        console.log("test::dataRaw:", dataRaw);
+        const data = prepareSunburstData(dataRaw);
+        console.log("test::data:", data);
+        drawSunburst(data);
+      });
+  }; // .btnPrimary::onclick
+</script>

@@ -83,6 +83,7 @@ navbar-links:
     - By Industry: "analysis/by-industry"
   Analysis:
     - Portfolio: "analysis/portfolio"
+    - Market: "analysis/market"
 
 ################
 # --- Logo --- #
