@@ -1,0 +1,274 @@
+---
+layout: page
+permalink: /details
+full-width: true
+title: Certificate Details
+subtitle: Investment Certificate Information
+footer-extra: [dtable-init.html]
+ext-css: //cdn.datatables.net/2.3.8/css/dataTables.dataTables.min.css
+comments: false
+wsDatatableIds: ['underlyings_table']
+wsDatatablePaths: ['/tickers/']
+wsDatatableRespCols: [
+  ['certificate_isin', 'certificate_name', 'stock_name', 'stock_google_finance_ticker', 'stock_industry', 'stock_sector']
+]
+---
+
+<div id="errorBox" class="error-box hidden"></div>
+
+<script>
+  const _WS_URL = '{{ site.wsUrl }}';
+  const _WS_SECRET = '{{ site.data.env_vars.wsSecret }}';
+  const _DELIMITER = '{{ site.ws_csv_delimiter }}';
+
+  // Extract ISIN from query string
+//   const params = new URLSearchParams(window.location.search);
+//   const isin = params.get('ISIN');
+  const isin = window.location.pathname.split("/").pop();
+  console.log("Details page - ISIN:", isin);
+
+  if (!isin) {
+    // Show 404 if ISIN is missing
+    // document.addEventListener('DOMContentLoaded', function() {
+    //   document.getElementById('errorBox').innerHTML = 
+    //     '<strong>404 Error:</strong> ISIN parameter is required. Please use the format: /details/&lt;ISIN&gt;';
+    //   document.getElementById('errorBox').classList.remove('hidden');
+    //   document.getElementById('detailsSection').style.display = 'none';
+    //   document.getElementById('underlyingsSection').style.display = 'none';
+    // });
+    const notFoundPermalink = "{{ site.pages | where: 'title', '404 Not Found' | map: 'permalink' | first | default: '/404.html' }}";
+    console.log("Redirecting to 404 page:", notFoundPermalink);
+    window.location.replace(notFoundPermalink);
+  } else {
+    // Fetch and display details
+    document.addEventListener('DOMContentLoaded', function() {
+      loadCertificateDetails();
+      loadUnderlyingData();
+    });
+  }
+
+  function loadCertificateDetails() {
+    const url = _WS_URL + '/details/' + isin;
+    
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + _WS_SECRET
+      }
+    })
+      .then(r => r.json())
+      .then(data => displayDetails(data))
+      .catch(err => {
+        console.error('Error loading certificate details:', err);
+        ErrorBox.show('Failed to load certificate details. Please try again later.', 'errorBox');
+      });
+  }
+
+  function loadUnderlyingData() {
+    // The dtable-init.html will handle loading the underlyings via dtUpdate
+    // We need to call dtUpdate for the underlyings table
+    if (typeof dtUpdate === 'function') {
+      dtUpdate(0, isin);
+    }
+  }
+
+  function displayDetails(dataRaw) {
+    if (!dataRaw || dataRaw.length === 0) {
+      ErrorBox.show('Certificate not found.', 'errorBox');
+      return;
+    }
+
+    // Skip header row
+    const data = dataRaw.slice(1);
+    if (data.length === 0) {
+      ErrorBox.show('Certificate not found.', 'errorBox');
+      return;
+    }
+
+    // Parse first row (there should only be one)
+    const row = data[0];
+    const cols = row.split(_DELIMITER);
+    
+    // Map columns based on header from the API response
+    const headerRow = dataRaw[0];
+    const headers = headerRow.split(_DELIMITER);
+    const dataMap = {};
+    
+    headers.forEach((header, idx) => {
+      dataMap[header] = cols[idx] || '';
+    });
+
+    // Populate details section
+    const detailsHtml = `
+      <div class="details-content">
+        <div class="details-grid">
+          <div class="detail-item">
+            <label>ISIN:</label>
+            <span>${dataMap['isin'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Issuer:</label>
+            <span>${dataMap['issuer'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Name:</label>
+            <span>${dataMap['name'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Certificate Type Tags:</label>
+            <span>${dataMap['certificate_type_tags'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Memory Effect:</label>
+            <span>${dataMap['memory_effect'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Phase:</label>
+            <span>${dataMap['phase'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Currency:</label>
+            <span>${dataMap['currency'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Industry:</label>
+            <span>${dataMap['industry'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Callable:</label>
+            <span>${dataMap['callable'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Strike Date:</label>
+            <span>${dataMap['strike_date'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Issue Date:</label>
+            <span>${dataMap['issue_date'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Reimbursement Date:</label>
+            <span>${dataMap['rembursement_date'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Autocallable Date:</label>
+            <span>${dataMap['autocallable_date'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Capital Barrier:</label>
+            <span>${dataMap['capital_barrier'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Airbag:</label>
+            <span>${dataMap['airbag'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Risk Level:</label>
+            <span>${dataMap['risk_level'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Coupon Amount:</label>
+            <span>${dataMap['coupon_amount'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Coupon Recurrence:</label>
+            <span>${dataMap['coupon_recurrence'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Coupon Next Ex Date:</label>
+            <span>${dataMap['coupon_next_ex_date'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Coupon Type:</label>
+            <span>${dataMap['coupon_type'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Coupon Barrier:</label>
+            <span>${dataMap['coupon_barrier'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Leverage:</label>
+            <span>${dataMap['leverage'] || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <label>Exchange Risk:</label>
+            <span>${dataMap['exchange_risk'] || '—'}</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('detailsContent').innerHTML = detailsHtml;
+  }
+</script>
+
+<style>
+  .details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .detail-item {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+  }
+
+  .detail-item label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 4px;
+    font-size: 0.9em;
+  }
+
+  .detail-item span {
+    color: #666;
+    word-break: break-word;
+  }
+
+  .error-box.hidden {
+    display: none;
+  }
+
+  .error-box {
+    padding: 12px;
+    margin: 15px 0;
+    border: 1px solid #f5222d;
+    border-radius: 4px;
+    background-color: #fff1f0;
+    color: #cf1322;
+  }
+</style>
+
+<!-- Details Section -->
+<div id="detailsSection">
+  <h2>Certificate Details</h2>
+  <div id="detailsContent">
+    <p>Loading certificate details...</p>
+  </div>
+</div>
+
+<!-- Underlyings Section -->
+<div id="underlyingsSection">
+  <h2>Underlyings</h2>
+  <table id="underlyings_table" class="display" style="width:100%">
+    <thead>
+      <tr>
+        <th>Certificate ISIN</th>
+        <th>Certificate Name</th>
+        <th>Stock Name</th>
+        <th>Stock Ticker</th>
+        <th>Industry</th>
+        <th>Sector</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div>

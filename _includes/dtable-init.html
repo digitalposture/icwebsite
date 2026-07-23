@@ -17,6 +17,20 @@
     const _DT_WS_URL    = '{{ site.wsUrl }}';
     const _DT_WS_SECRET = '{{ site.data.env_vars.wsSecret }}';
 
+    const createLink = function (value) {
+        const ISIN_RE = /^[A-Z]{2}[A-Z0-9]{9}[0-9]$/;
+
+        let link = "#";
+
+        if (/^https?:\/\//.test(value)) {
+            link = value;
+        } else if (ISIN_RE.test(value)) {
+            link = '/details/' + encodeURIComponent(value);
+        }
+
+        return link;
+    };
+
     // ── dtDraw / dtUpdate ────────────────────────────────────────────────────
     // These closures capture the page-specific vars above and delegate the
     // shared extraction logic to extractData() defined in icws.js.
@@ -59,17 +73,26 @@
             const tableId = tableIds[{{ tablePos }}];
             const el = document.getElementById(tableId);
             if (!el) return;
-            if (el.dataset.mdtStyle === 'basic') {
-                new DataTable('#' + tableId, {
-                    info: false, ordering: false, paging: false,
-                    layout: { topEnd: null }
-                });
-            } else {
-                new DataTable('#' + tableId);
-            }
+            let dtOptions = el.dataset.mdtStyle === 'basic'
+                ? { info: false, ordering: false, paging: false, layout: { topEnd: null } }
+                : {};
+            dtOptions.columnDefs = [
+                {
+                    targets: 0, // colonna ISIN or a URL
+                    render: function (data, type) {
+                        console.log('Rendering ISIN column:', data, type);
+                        if (type !== 'display' || !data) return data;
+                        const value = String(data).trim();
+                        const link = createLink(value);
+                        return '<a href="' + link + '">' + value + '</a>';
+                    }
+                }
+            ];
+            new DataTable('#' + tableId, dtOptions);
         })();
         {% endfor %}
     });
+
 </script>
 
 {%- endif %}

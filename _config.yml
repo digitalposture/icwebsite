@@ -42,6 +42,8 @@ collections:
     output: true
   analysis:
     output: true
+  details:
+    output: true
 
 # Build settings
 # theme: minima
@@ -156,6 +158,7 @@ exclude:
   - "README.md"
   - "LICENSE"
   - "**/NOT-USED*"
+  - NOT-USED*
 
 ## #################
 ## Content settings
