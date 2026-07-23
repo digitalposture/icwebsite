@@ -1,94 +1,22 @@
+<script src="/assets/js/icws.js"></script>
 <script>
     console.log('select-init.html -- inits the select input');
 </script>
 {% if page.wsSelectId %}
-
 <script>
-// Usage: const updateSelectOptions = createSelectUpdater({ wsUrl: '{{ site.wsUrl }}', wsSecret: '{{ site.data.env_vars.wsSecret }}' });
-const createSelectUpdater = ({ wsUrl, wsSecret }) => {
-    // function to populate select options. Usage: updateSelectOptions('select_id', 'select_path', valPos, textPos)
-    return function updateSelectOptions(select_id, select_path, valPos, textPos) {
-
-        console.log(`==> Calling... ${wsUrl}${select_path} for select: ${select_id}`);
-
-        fetch(wsUrl + select_path, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + wsSecret
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-
-                data.shift(); // remove header
-
-                // const uniqueSorted = [...new Set(data)].sort();
-                // sort by text column (case-insensitive)
-                const uniqueSorted = data.sort((a, b) =>
-                    a.split(";")[1].toLowerCase()
-                        .localeCompare(b.split(";")[1].toLowerCase())
-                    );
-
-                console.log(
-                    'Data retrieved:',
-                    data,
-                    data.length,
-                    uniqueSorted.length
-                );
-
-                const select = document.getElementById(select_id);
-
-                // optional: clear previous options
-                // select.innerHTML = '';
-
-                uniqueSorted.reduce((acc, row) => {
-
-                    const cols = row.split(";");
-
-                    const value = cols[valPos];
-                    const text = cols[textPos];
-
-                    // keep first occurrence only
-                    if (!acc[value]) {
-
-                        acc[value] = true;
-
-                        const option = document.createElement('option');
-
-                        option.value = value;
-                        option.textContent = `${text} (${value})`;
-
-                        select.appendChild(option);
-                    }
-
-                    return acc;
-
-                }, {});
-            })
-            .catch(error =>
-                console.error(
-                    'Error fetching data for select:',
-                    select_id,
-                    error
-                )
-            );
-    };
-};
-
-// autopopulate select options if page.wsSelectId and page.wsSelectPath are defined
-const wsSelectId = '{{ page.wsSelectId }}';
-const wsSelectPath = '{{ page.wsSelectPath }}';
-const wsSelectValPos = '{{ page.wsSelectValPos | default: 0 }}';
-const wsSelectTextPos = '{{ page.wsSelectTextPos | default: 1 }}';
-if (typeof wsSelectId !== 'undefined' && typeof wsSelectPath !== 'undefined') {
-    console.log('Loading Data for Select Options: {{ site.wsUrl }}', wsSelectId, wsSelectPath, wsSelectValPos, wsSelectTextPos);
-    const updateSelectOptions = createSelectUpdater({
-        wsUrl: '{{ site.wsUrl }}',
-        wsSecret: '{{ site.data.env_vars.wsSecret }}'
-    });
-    updateSelectOptions(wsSelectId, wsSelectPath, parseInt(wsSelectValPos), parseInt(wsSelectTextPos));
-}
-
+    // Auto-populate the page's select element using createSelectUpdater() from icws.js.
+    (function () {
+        const updateSelectOptions = createSelectUpdater({
+            wsUrl:     '{{ site.wsUrl }}',
+            wsSecret:  '{{ site.data.env_vars.wsSecret }}',
+            delimiter: '{{ site.ws_csv_delimiter }}'
+        });
+        updateSelectOptions(
+            '{{ page.wsSelectId }}',
+            '{{ page.wsSelectPath }}',
+            parseInt('{{ page.wsSelectValPos | default: 0 }}'),
+            parseInt('{{ page.wsSelectTextPos | default: 1 }}')
+        );
+    })();
 </script>
 {%- endif %}

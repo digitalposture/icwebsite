@@ -44,7 +44,7 @@ wsDatatableRespCols: [
         <li>The table in Certificate Details will update to show further details.</li>
       </ol>
     </p>
-        <p class="tool-description">
+    <p class="tool-description">
       <b>When to use this tool</b>
       <ol class="tool-description">
         <li>You have multiple certificates in your portfolio, you want to analyze their underlying assets and exposure.</li>
@@ -52,7 +52,8 @@ wsDatatableRespCols: [
       </ol>
     </p>
   </div>
-  </div>
+</div>
+
 <!-- Tabs -->
 <ul class="nav nav-tabs" id="portfolioTabs" role="tablist">
   <li class="nav-item active">
@@ -68,13 +69,13 @@ wsDatatableRespCols: [
   </li>
 
   <li class="nav-item">
-    <a class="nav-link" id="table-tab" data-toggle="tab" href="#underlyingsPane" role="tab">
+    <a class="nav-link" id="underlyings-tab" data-toggle="tab" href="#underlyingsPane" role="tab">
       Underlyings
     </a>
   </li>
 
   <li class="nav-item">
-    <a class="nav-link" id="table-tab" data-toggle="tab" href="#tablePane" role="tab">
+    <a class="nav-link" id="details-tab" data-toggle="tab" href="#tablePane" role="tab">
       Certificate Details
     </a>
   </li>
@@ -84,9 +85,7 @@ wsDatatableRespCols: [
 
   <!-- General tab -->
   <div class="tab-pane fade show active" id="infoPane" role="tabpanel">
-
     <div class="tool-container">
-
       <div class="tool-section">
         <label for="cert_select" class="tool-label">
           Select a certificate or paste a list of ISINs:
@@ -101,40 +100,31 @@ wsDatatableRespCols: [
 
       <div class="tool-actions">
         <button id="btnPrimary" class="btn btn-primary">Load Data</button>
-          {% include error-box.html errorBoxId="errorBoxForLoad" %}
+        {% include error-box.html errorBoxId="errorBoxForLoad" %}
       </div>
-
     </div>
-
-
   </div>
 
   <!-- Chart tab -->
   <div class="tab-pane fade" id="chartPane" role="tabpanel">
-
     <div class="tool-section">
       <div id="plotlyid"></div>
     </div>
 
-      <div class="tool-actions">
-        <button id="btnSwap" class="btn btn-secondary">Swap Certs ↔ Tickers</button>
-        {% include error-box.html errorBoxId="errorBoxForSwap" %}
-      </div>
-
+    <div class="tool-actions">
+      <button id="btnSwap" class="btn btn-secondary">Swap Certs ↔ Tickers</button>
+      {% include error-box.html errorBoxId="errorBoxForSwap" %}
+    </div>
   </div>
 
-    <!-- Underlyings tab -->
+  <!-- Underlyings tab -->
   <div class="tab-pane fade" id="underlyingsPane" role="tabpanel">
-
-       {% include dtable-th.html tablePos=1 %}
-
+    {% include dtable-th.html tablePos=1 %}
   </div>
 
   <!-- Table tab -->
   <div class="tab-pane fade" id="tablePane" role="tabpanel">
-
     <div class="tool-section">
-
       <div class="table-header">
         <h4>Certificates Details</h4>
         <span id="result_count" class="table-count"></span>
@@ -143,16 +133,12 @@ wsDatatableRespCols: [
       <div class="table-wrapper">
         {% include dtable-th.html tablePos=0 %}
       </div>
-
     </div>
-
   </div>
 
 </div>
 
 <script>
-
-  // button btnSwap
   let swapSwitch = false;
   let certs_ticker_data = [];
 
@@ -163,21 +149,35 @@ wsDatatableRespCols: [
     } else {
       ErrorBox.show("No data to swap yet.", "errorBoxForSwap");
     }   
-  }; // .btnSwap::onclick
+  };
 
-  // button btnPrimary
+  document.getElementById('cert_select').addEventListener('change', function () {
+    const selectedVal = this.value.trim();
+    if (!selectedVal) return;
+    const textarea = document.getElementById('cert_csv_list');
+    const currentText = textarea.value.trim();
+    if (!currentText) {
+      textarea.value = selectedVal;
+    } else {
+      const list = currentText.split(',').map(s => s.trim());
+      if (!list.includes(selectedVal)) {
+        textarea.value = currentText + ', ' + selectedVal;
+      }
+    }
+  });
+
   document.getElementById('btnPrimary').onclick = async function () {
-    let cert_isins = document.getElementById('cert_csv_list').value.trim() || document.getElementById('cert_select').value;
-    if (cert_isins == "") {
+    let raw_input = document.getElementById('cert_csv_list').value.trim() || document.getElementById('cert_select').value;
+    if (!raw_input) {
       ErrorBox.show("Please select a certificate or paste a list of ISINs to load data.", "errorBoxForLoad");
       return;
     }
 
-    let validIsisns = ErrorBox.validateIsinList(cert_isins, "errorBoxForLoad");
+    let validIsins = ErrorBox.validateIsinList(raw_input, "errorBoxForLoad");
+    if (!validIsins) return;
 
-    console.log("Selected certs: ", '{{ site.wsUrl }}/tickers/', cert_isins);
     var secret = "{{ site.data.env_vars.wsSecret }}";
-    fetch('{{ site.wsUrl }}/tickers/' + validIsisns, {
+    fetch('{{ site.wsUrl }}/tickers/' + validIsins, {
       method: "GET",
       headers: {
         "Content-Type": "text/plain",
@@ -186,21 +186,18 @@ wsDatatableRespCols: [
     })
       .then(response => response.json())
       .then(dataRaw => {
-        console.log("test::data:", dataRaw);
         dataRaw.shift(); // remove header
-        certs_ticker_data = createPlotlyData(dataRaw, 0, 3, 1, 2); // source is cert at pos 0, target is ticker at pos 3
-        console.log("test::plotlyData:", certs_ticker_data);
+        certs_ticker_data = createPlotlyData(dataRaw, 0, 3, 1, 2, '{{ site.ws_csv_delimiter }}');
         drawPlotly(certs_ticker_data, swapSwitch);
-        dtUpdate(0, cert_isins);
-        dtUpdate(1, cert_isins);
-        new bootstrap.Tab(
-          document.getElementById('chart-tab')
-        ).show();
-        //render('source-to-target');
-
+        dtUpdate(0, validIsins);
+        dtUpdate(1, validIsins);
+        if (typeof bootstrap !== 'undefined' && bootstrap.Tab) {
+          new bootstrap.Tab(document.getElementById('chart-tab')).show();
+        }
+      })
+      .catch(err => {
+        console.error("Error loading portfolio data:", err);
+        ErrorBox.show("Error loading data from server.", "errorBoxForLoad");
       });
-  }; // .btnPrimary::onclick
-  //   $('a[data-toggle="tab"]').on('shown.bs.tab', function () {
-  //     Plotly.Plots.resize('plotlyid');
-  // });
+  };
 </script>

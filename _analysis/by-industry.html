@@ -40,7 +40,7 @@ wsDatatableRespCols: [
         <li>The table will update to show all certificates related to the selected industry.</li>
       </ol>
     </p>
-        <p class="tool-description">
+    <p class="tool-description">
       <b>When to use this tool</b>
       <ol class="tool-description">
         <li>You have multiple certificates in your portfolio, you read/heard a specific news about an industry so you want to see how it affects your investments.</li>
@@ -50,7 +50,6 @@ wsDatatableRespCols: [
   </div>
   <!-- Chart -->
   <div class="tool-section">
-    <!-- <pre class="mermaid"></pre> -->
      <div id='plotlyid'><!-- Plotly chart will be drawn inside this DIV --></div>
   </div>
 
@@ -83,37 +82,28 @@ wsDatatableRespCols: [
   {% include dtable-th.html tablePos=0 %}
 </div>
 
-<!-- <textarea id="mm_preview" hidden></textarea> -->
-
 <script>
-
-  // button btnSwap
   let swapSwitch = false;
   let certs_ticker_data = [];
 
   document.getElementById('btnSwap').onclick = function () {
     if (certs_ticker_data && certs_ticker_data.node && certs_ticker_data.link) {
       swapSwitch = !swapSwitch;
-      //render(swapSwitch ? 'target-to-source' : 'source-to-target');
       drawPlotly(certs_ticker_data, swapSwitch);
     } else {
       ErrorBox.show("No data to swap yet.", "errorBoxForLoad");
     }
-  }; // .btnSwap::onclick
+  };
 
-  // button btnPrimary
   document.getElementById('btnPrimary').onclick = async function () {
     let selected_criteria = document.getElementById('criteria_csv_list').value || document.getElementById('criteria_select').value;
-    selected_criteria = selected_criteria.trim();
-    if (selected_criteria == "") {
+    selected_criteria = selected_criteria.split(',').map(s => s.trim()).filter(Boolean).join(',');
+    if (selected_criteria === "") {
       ErrorBox.show("Please select an industry or paste a list of industries to load data.", "errorBoxForLoad");
       return; 
     }
-    //   cert_isins = document.getElementById('criteria_select').value;
 
-    console.log("Selected criteria: ", '{{ site.wsUrl }}/tickers/*?industries=', selected_criteria);
     var secret = "{{ site.data.env_vars.wsSecret }}";
-    console.log("Secret: ", secret);
     fetch('{{ site.wsUrl }}/tickers/*?industries=' + selected_criteria, {
       method: "GET",
       headers: {
@@ -123,17 +113,14 @@ wsDatatableRespCols: [
     })
       .then(response => response.json())
       .then(dataRaw => {
-        console.log("test::data:", dataRaw);
-        dtDraw(0,dataRaw);
+        dtDraw(0, dataRaw);
         dataRaw.shift(); // remove header
-        // compare selected_criteria with data at pos 5 (industry) and filter accordingly
-        // const filteredData = dataRaw.filter(row => {
-        //   const industry = row.split(";")[5];
-        //   return industry && selected_criteria.toLowerCase().includes(industry.toLowerCase());
-        // });
-        certs_ticker_data = createPlotlyData(dataRaw, 0, 6, 1, 6); // source is cert at pos 0, target is ticker at pos 3
-        console.log("test::dataRaw:", dataRaw);
+        certs_ticker_data = createPlotlyData(dataRaw, 0, 6, 1, 6, '{{ site.ws_csv_delimiter }}');
         drawPlotly(certs_ticker_data, swapSwitch);
+      })
+      .catch(err => {
+        console.error("Error loading industry data:", err);
+        ErrorBox.show("Error loading data from server.", "errorBoxForLoad");
       });
-  }; // .btnPrimary::onclick
+  };
 </script>

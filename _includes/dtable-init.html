@@ -1,123 +1,73 @@
+<script src="/assets/js/icws.js"></script>
 <script>
-    console.log('dtable-init.html INIT -- it loads datable js and css');
+    console.log('dtable-init.html INIT -- loads DataTables JS');
 </script>
 {% if page.wsDatatableIds %}
 
-<!-- DataTables  js if async => lines#74 does not work properly -->
-<script type="text/javascript" id="datatables-script" src="//code.jquery.com/jquery-3.5.1.min.js"></script>
-<script type="text/javascript" id="jquery-script" src="//cdn.datatables.net/2.3.7/js/dataTables.min.js"></script>
-
-<!-- First, this walks through the tables that occur between ...-begin
-         and ...-end and add the "datatable" class to them.
-         Then it invokes DataTable's standard initializer
-         Credit here: http://www.beardedhacker.com/blog/2015/08/28/add-class-attribute-to-markdown-table/
-      -->
+<!-- DataTables dependencies -->
+<script id="jquery-script" src="//code.jquery.com/jquery-3.5.1.min.js"></script>
+<script id="datatables-script" src="//cdn.datatables.net/2.3.7/js/dataTables.min.js"></script>
 
 <script>
-    console.log('JS DataTables starting...');
-    const tableIds = {{ page.wsDatatableIds | jsonify }};
-    const tableCols = {{ page.wsDatatableCols | jsonify }};
-    const tablePaths = {{ page.wsDatatablePaths | jsonify }};
-    const tableRespCols = {{ page.wsDatatableRespCols | jsonify }};
-    console.log('DataTables tableIds:', tableIds);
-    console.log('DataTables tableCols:', tableCols);
-    console.log('DataTables tablePaths:', tablePaths);
+    // ── Page-specific config (Liquid-rendered) ───────────────────────────────
+    const tableIds      = {{ page.wsDatatableIds | jsonify }};
+    const tablePaths    = {{ page.wsDatatablePaths | jsonify }};
+    const tableRespCols = {{ page.wsDatatableRespCols | jsonify }} || null;
+    const _DT_DELIMITER = '{{ site.ws_csv_delimiter }}';
+    const _DT_WS_URL    = '{{ site.wsUrl }}';
+    const _DT_WS_SECRET = '{{ site.data.env_vars.wsSecret }}';
 
-    var extractData = function (dataRaw, tablePos) {
-        // split header
-        const header = dataRaw[0].split('{{ site.ws_csv_delimiter }}');
+    // ── dtDraw / dtUpdate ────────────────────────────────────────────────────
+    // These closures capture the page-specific vars above and delegate the
+    // shared extraction logic to extractData() defined in icws.js.
 
-        // map column name -> index
-        const colIndex = {};
-
-        header.forEach((col, idx) => {
-            colIndex[col] = idx;
-        });
-
-        // extract rows without header
-        return dataRaw.slice(1).map(row => {
-
-            const cols = row.split('{{ site.ws_csv_delimiter }}');
-
-            return (tableRespCols != undefined && tableRespCols[tablePos].length > 0)? tableRespCols[tablePos].map(colName => {
-                const idx = colIndex[colName];
-
-                return idx !== undefined ? cols[idx] : '';
-            }):row.split('{{ site.ws_csv_delimiter }}'); ;
-
-        });
+    const dtDraw = function (tablePos, dataRaw) {
+        const data  = extractData(dataRaw, tablePos, tableRespCols, _DT_DELIMITER);
+        const table = new DataTable('#' + tableIds[tablePos]);
+        table.clear();
+        table.rows.add(data);
+        table.draw();
     };
 
-    var dtDraw = function (tablePos, dataRaw) {
-        let data = extractData(dataRaw, tablePos);
-        console.log('Extracted data:', data, data.length);
-        let table = new DataTable('#' + tableIds[tablePos]);
-        table.clear(); // Clear existing data
-        table.rows.add(data); // Add new data
-        table.draw(); // Redraw the table to reflect the new data
-        console.log('Datatable drawn:', data.length, data);
-    };
-
-    // function to update DataTable with query string, page.wsDatatablePath is needed.
-    var dtUpdate = function (tablePos, queryString) {
-        if (queryString == "N/A") {
-            let table = new DataTable('#' + tableIds[tablePos]);
-            return;
-        }
-        const urlPath = tablePaths[tablePos] + queryString;
-        console.log('==> Calling... {{ site.wsUrl }}' + urlPath)
-        var secret = "{{ site.data.env_vars.wsSecret }}";
-        fetch('{{ site.wsUrl }}' + urlPath, {
-            method: "GET",
+    const dtUpdate = function (tablePos, queryString) {
+        if (queryString === 'N/A') return;
+        const url = _DT_WS_URL + tablePaths[tablePos] + queryString;
+        fetch(url, {
+            method: 'GET',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + secret
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + _DT_WS_SECRET
             }
         })
-            .then(response => response.json())
-            .then(dataRaw => {
-                // console.log('dataRaw retrieved:', dataRaw, dataRaw.length);
-                // let data = extractData(dataRaw, tablePos);
-                // console.log('Extracted data:', data, data.length);
-                // let table = new DataTable('#' + tableIds[tablePos]);
-                // table.clear(); // Clear existing data
-                // table.rows.add(data); // Add new data
-                // table.draw(); // Redraw the table to reflect the new data
-                dtDraw(tablePos, dataRaw);
-            })
-            .catch (error => console.error('Error fetching certificates:', error));
-        }; // dtUpdate
+            .then(r => r.json())
+            .then(dataRaw => dtDraw(tablePos, dataRaw))
+            .catch(err => console.error('dtUpdate error (table ' + tablePos + '):', err));
+    };
 
-
-    $(document).ready(function () {
-        console.log('DataTables READY...');
+    // ── DataTable initialisation ─────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', function () {
         {% assign n = page.wsDatatableIds.size | minus: 1 %}
-        if ('{{ page.wsDatatableAutoLoad }}' == 'true') {
-            console.log('Auto-loading DataTable with initial data... {{ page.url}} {{ page.wsDatatableAutoLoad }}');
+
+        {% if page.wsDatatableAutoLoad %}
             {% for tablePos in (0..n) %}
-                dtUpdate({{ tablePos }},''); // initial load with empty query string
+                dtUpdate({{ tablePos }}, '');
             {% endfor %}
-        }
-        console.log('DataTables document ready, applying styles to...');
-        // TODO: autoload data per table
-        // let dtRun = $('#dTable').data('mdt-run');
-        // if (dtRun != undefined && !dtRun) return;
-        let dtStyle = ""; 
+        {% endif %}
+
         {% for tablePos in (0..n) %}
-            dtStyle = $('#' + tableIds[{{tablePos}}]).data('mdt-style');
-            console.log("tableId: ", tableIds[{{tablePos}}], "dtStyle: ", dtStyle);
-            if (dtStyle == "basic") {
-                new DataTable('#' + tableIds[{{tablePos}}], {
-                    info: false,
-                    ordering: false,
-                    layout: {
-                        topEnd: null
-                    },
-                    paging: false
+        (function () {
+            const tableId = tableIds[{{ tablePos }}];
+            const el = document.getElementById(tableId);
+            if (!el) return;
+            if (el.dataset.mdtStyle === 'basic') {
+                new DataTable('#' + tableId, {
+                    info: false, ordering: false, paging: false,
+                    layout: { topEnd: null }
                 });
             } else {
-                new DataTable('#' + tableIds[{{tablePos}}]); // init just to avoid flat table format
+                new DataTable('#' + tableId);
             }
+        })();
         {% endfor %}
     });
 </script>

@@ -69,7 +69,7 @@ wsSelectPath: /tickers_index/*
 
 </div>
 <script>
-  <!-- manage ticker once selected from options -->
+  // manage ticker once selected from options
   document.getElementById('ticker_select').addEventListener('change', function() {
     const ticker = this.value;
     if (ticker) dtUpdate(0, '?tickers=' + ticker);
