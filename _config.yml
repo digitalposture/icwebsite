@@ -141,6 +141,8 @@ comments: false # micser: not sure if it works
 #
 # exclude: ["*_copy.html", "*.txt", "**/*.old"]
 # include: ["assets/js/icws.js"]
+include:
+  - _redirects
 exclude:
   - .sass-cache/
   - .jekyll-cache/
@@ -159,6 +161,7 @@ exclude:
   - "LICENSE"
   - "**/NOT-USED*"
   - NOT-USED*
+  - docs/
 
 ## #################
 ## Content settings
