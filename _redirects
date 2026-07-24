@@ -1,1 +1,1 @@
-/details/*   /details/   200
+/details/*   /details/:splat   200
