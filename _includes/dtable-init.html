@@ -16,6 +16,7 @@
     const _DT_DELIMITER = '{{ site.ws_csv_delimiter }}';
     const _DT_WS_URL    = '{{ site.wsUrl }}';
     const _DT_WS_SECRET = '{{ site.data.env_vars.wsSecret }}';
+    const _LINK_PATH   = '/details/';
 
     const createLink = function (value) {
         const ISIN_RE = /^[A-Z]{2}[A-Z0-9]{9}[0-9]$/;
@@ -25,7 +26,7 @@
         if (/^https?:\/\//.test(value)) {
             link = value;
         } else if (ISIN_RE.test(value)) {
-            link = '/certificates/' + encodeURIComponent(value);
+            link = _LINK_PATH + encodeURIComponent(value);
         }
 
         return link;
