@@ -1,1 +1,2 @@
-/certificates/*   /details/:splat   200
+/certificates/*   /details/   200
+/certs/*   /details/index.html   200
