@@ -34,21 +34,145 @@ hasPlot: true
       <option value="latest" selected>Latest</option>
     </select>
   </div>
-  
+
   <!-- Actions -->
   <div class="tool-actions">
     <button id="btnPrimary" class="btn btn-primary">
       Load Market Data
     </button>
-    {% include error-box.html errorBoxId="errorBoxForLoad" %} 
+    {% include error-box.html errorBoxId="errorBoxForLoad" %}
   </div>
 
-  <!-- Chart -->
-  <div class="tool-section mt-3">
-     <div id='plotlyid'><!-- Plotly sunburst chart will be drawn inside this DIV --></div>
+<!-- Chart + Search -->
+<div class="tool-section mt-3 chart-with-search">
+  <div id='plotlyid' class="chart-area"><!-- Plotly sunburst chart will be drawn inside this DIV --></div>
+
+  <div id="searchIds" class="search-panel" style="visibility: hidden;">
+    <label for="searchIdsInput" class="tool-label">Search by label</label>
+    <input
+      type="text"
+      id="searchIdsInput"
+      class="tool-input"
+      placeholder="Type at least 2 characters…"
+      autocomplete="off"
+    />
+    <select
+      id="searchIdsResults"
+      class="tool-input search-results"
+      multiple
+      size="15"
+    ></select>
   </div>
+</div>
 
 </div>
+
+<style>
+  .chart-with-search {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .chart-area {
+    flex: 1 1 auto;
+    min-width: 0; /* evita che plotly esploda il flex item */
+  }
+
+  .search-panel {
+    flex: 0 0 260px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .search-results {
+    font-family: monospace;
+    font-size: 0.85rem;
+    min-height: 300px;
+  }
+
+  .search-results option {
+    padding: 2px 4px;
+  }
+
+  /* stack verticale su schermi stretti */
+  @media (max-width: 768px) {
+    .chart-with-search {
+      flex-direction: column;
+    }
+    .search-panel {
+      flex-basis: auto;
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    const input = document.getElementById('searchIdsInput');
+    const select = document.getElementById('searchIdsResults');
+
+    let debounceTimer = null;
+
+    function renderOptions(ids) {
+      select.innerHTML = '';
+      ids.forEach(function (id) {
+        const opt = document.createElement('option');
+        opt.value = id;
+        opt.textContent = id;
+        select.appendChild(opt);
+      });
+    }
+
+    function highlightFromIds(ids) {
+      const gd = document.getElementById('plotlyid');
+      if (!gd) return;
+
+      if (ids.length > 0) {
+        highlightSunburstIds(gd, ids, {
+          highlightColor: '#6afc09',
+          dimColor: 'rgba(200,200,200,0.35)',
+          originalColors: originalPcts
+        });
+      } else if (originalPcts) {
+        // nessuna selezione/nessun risultato -> torna ai colori originali
+        resetSunburstColors(gd, originalPcts);
+      }
+    }
+
+    // Ricerca testuale: filtra le option e evidenzia TUTTI i match trovati
+    input.addEventListener('input', function () {
+      clearTimeout(debounceTimer);
+
+      const value = input.value.trim();
+
+      if (value.length < 2) {
+        select.innerHTML = '';
+        highlightFromIds([]);
+        return;
+      }
+
+      debounceTimer = setTimeout(function () {
+        if (typeof originalRows === 'undefined' || !originalRows) {
+          console.warn('originalRows non definito: assicurati che i dati siano stati caricati prima della ricerca.');
+          return;
+        }
+
+        const matchedIds = findIdsByLabel(originalRows, value);
+        renderOptions(matchedIds);
+        highlightFromIds(matchedIds);
+      }, 200);
+    });
+
+    // Selezione manuale nella lista: evidenzia SOLO gli id selezionati dall'utente
+    select.addEventListener('change', function () {
+      const selectedIds = Array.from(select.selectedOptions).map(o => o.value);
+      highlightFromIds(selectedIds);
+    });
+  })();
+</script>
 
 <script>
   const wsUrl = "{{ site.wsUrl }}";
@@ -92,7 +216,10 @@ hasPlot: true
       });
   });
 
+
   // Load sunburst data for selected date
+  let originalPcts = null;
+  let originalRows = null;
   document.getElementById('btnPrimary').onclick = async function () {
     const selectedDate = document.getElementById('market_date_select').value || 'latest';
     const endpoint = wsUrl + '/sunburst/' + selectedDate + '/*';
@@ -107,7 +234,16 @@ hasPlot: true
       .then(response => response.json())
       .then(dataRaw => {
         const data = prepareSunburstData(dataRaw, '{{ site.ws_csv_delimiter }}');
+        console.log("Market sunburst data loaded for date:",  data);
+        originalPcts = data[0].marker.colors;
+        originalRows = dataRaw;
         drawSunburst(data);
+
+        // reset search box + lista ogni volta che ricarichi nuovi dati
+        document.getElementById('searchIdsInput').value = '';
+        document.getElementById('searchIdsResults').innerHTML = '';
+
+        document.getElementById('searchIds').style.visibility = 'visible';
       })
       .catch(err => {
         console.error("Error loading market sunburst data:", err);

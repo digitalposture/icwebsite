@@ -40,7 +40,7 @@ if (!window._ICWS_LOADED_) {
         }
 
         function splitIsins(csvString) {
-            const valid   = [];
+            const valid = [];
             const invalid = [];
             String(csvString)
                 .split(',')
@@ -87,13 +87,13 @@ if (!window._ICWS_LOADED_) {
                     if (!select) return;
 
                     uniqueSorted.reduce((seen, row) => {
-                        const cols  = row.split(delimiter);
+                        const cols = row.split(delimiter);
                         const value = cols[valPos];
-                        const text  = cols[textPos];
+                        const text = cols[textPos];
                         if (!seen[value]) {
                             seen[value] = true;
                             const opt = document.createElement('option');
-                            opt.value       = value;
+                            opt.value = value;
                             opt.textContent = `${text} (${value})`;
                             select.appendChild(opt);
                         }
@@ -110,14 +110,14 @@ if (!window._ICWS_LOADED_) {
     // ============================================================
     window.extractData = function (dataRaw, tablePos, tableRespCols, delimiter = ';') {
         if (!dataRaw || dataRaw.length === 0) return [];
-        const header   = dataRaw[0].split(delimiter);
+        const header = dataRaw[0].split(delimiter);
         const colIndex = {};
         header.forEach((col, idx) => { colIndex[col] = idx; });
 
         const projection =
             tableRespCols != null &&
-            tableRespCols[tablePos] &&
-            tableRespCols[tablePos].length > 0
+                tableRespCols[tablePos] &&
+                tableRespCols[tablePos].length > 0
                 ? tableRespCols[tablePos]
                 : null;
 
@@ -143,8 +143,8 @@ if (!window._ICWS_LOADED_) {
         str.length > maxLen ? str.slice(0, maxLen) + '...\n' : str;
 
     window.createPlotlyData = function (rows, sourcePos, targetPos, sourceLblPos, targetLblPos, delimiter = ';') {
-        const sources   = [];
-        const targets   = [];
+        const sources = [];
+        const targets = [];
         const relations = [];
 
         rows.forEach(row => {
@@ -195,14 +195,14 @@ if (!window._ICWS_LOADED_) {
 
         const plotData = [{
             type: 'sankey',
-            domain:      { x: [0, 1], y: [0, 1] },
+            domain: { x: [0, 1], y: [0, 1] },
             orientation: 'h',
             node: {
-                pad:       15,
+                pad: 15,
                 thickness: 30,
-                line:      { color: 'black', width: 0.5 },
-                label:     data.node.label,
-                color:     data.node.color
+                line: { color: 'black', width: 0.5 },
+                label: data.node.label,
+                color: data.node.color
             },
             link: { source: sources, target: targets, value: data.link.value }
         }];
@@ -217,7 +217,7 @@ if (!window._ICWS_LOADED_) {
 
         const data = rawData.map(d => ({
             type: 'scatterpolar',
-            r:    d.r,
+            r: d.r,
             theta: dimensions,
             fill: 'toself',
             name: d.name
@@ -233,30 +233,34 @@ if (!window._ICWS_LOADED_) {
     window.extractColumn = function (data, columnName, delimiter = ';') {
         if (!Array.isArray(data) || data.length === 0) return [];
         const header = data[0].split(delimiter);
-        const index  = header.indexOf(columnName);
+        const index = header.indexOf(columnName);
         if (index === -1) return [];
         return data.slice(1).map(row => (row.split(delimiter)[index] || ''));
     };
 
+    //let originalPcts = null;
+    //let originalRows = null;
     window.prepareSunburstData = function (rows, delimiter = ';') {
-        const pcts   = extractColumn(rows, 'avgs', delimiter);
+        const pcts = extractColumn(rows, 'avgs', delimiter);
+        //originalPcts = pcts;
+        //originalRows = rows;
         const values = pcts.map(v => Math.abs(v));
 
         return [{
-            type:      'sunburst',
-            maxdepth:  4,
-            ids:       extractColumn(rows, 'ids',     delimiter),
-            labels:    extractColumn(rows, 'labels',  delimiter),
-            parents:   extractColumn(rows, 'parents', delimiter),
+            type: 'sunburst',
+            maxdepth: 4,
+            ids: extractColumn(rows, 'ids', delimiter),
+            labels: extractColumn(rows, 'labels', delimiter),
+            parents: extractColumn(rows, 'parents', delimiter),
             values,
-            leaf:      { opacity: 0.4 },
-            textinfo:  'label',
+            leaf: { opacity: 0.4 },
+            textinfo: 'label',
             hoverinfo: 'label+text',
             hovertext: pcts.map(v => v + '%'),
             marker: {
-                line:       { width: 2 },
-                colors:     pcts,   // signed value → red/green scale
-                cauto:      true,
+                line: { width: 2 },
+                colors: pcts,   // signed value → red/green scale
+                cauto: true,
                 colorscale: [[0, 'red'], [1, 'green']]
             }
         }];
@@ -267,4 +271,65 @@ if (!window._ICWS_LOADED_) {
         const config = Object.assign({ displayModeBar: false }, options);
         Plotly.newPlot('plotlyid', data, layout, config);
     };
+
+    window.highlightSunburstIds = function (gd, targetIds, {
+        highlightColor = '#6afc09',
+        dimColor = 'rgba(200,200,200,0.35)',
+        originalColors = null
+    } = {}) {
+        const trace = gd.data[0];
+        const ids = trace.ids;
+
+        if (!targetIds || targetIds.length === 0) {
+            if (originalColors) {
+                Plotly.restyle(gd, { 'marker.colors': [originalColors] }, [0]);
+            }
+            return;
+        }
+
+        const targetSet = new Set(targetIds);
+        const newColors = ids.map(id => targetSet.has(id) ? highlightColor : dimColor);
+
+        Plotly.restyle(gd, { 'marker.colors': [newColors] }, [0]);
+    }
+
+    window.resetSunburstColors = function (gd, originalPcts) {
+        if (originalPcts) Plotly.restyle(gd, { 'marker.colors': [originalPcts] }, [0]);
+    }
+
+    /**
+ * Cerca gli id il cui label contiene (case-insensitive) una stringa parziale.
+ *
+ * @param {string[]} rows - array di righe CSV-like, prima riga = header (es. "ids;labels;parents;values;counts;avgs")
+ * @param {string} partialIdToMatch - sottostringa da cercare dentro la colonna "labels"
+ * @returns {string[]} - array degli "ids" corrispondenti
+ */
+    window.findIdsByLabel = function (rows, partialIdToMatch) {
+        if (!rows || rows.length < 2 || !partialIdToMatch) return [];
+
+        const delimiter = ';';
+        const header = rows[0].split(delimiter);
+
+        const idsCol = header.indexOf('ids');
+        const labelsCol = header.indexOf('labels');
+
+        if (idsCol === -1 || labelsCol === -1) {
+            console.error('Colonne "ids" o "labels" non trovate nell\'header:', header);
+            return [];
+        }
+
+        const needle = partialIdToMatch.toLowerCase();
+
+        const matches = [];
+        for (let i = 1; i < rows.length; i++) {
+            const cols = rows[i].split(delimiter);
+            const label = cols[labelsCol];
+
+            if (label && label.toLowerCase().includes(needle)) {
+                matches.push(cols[idsCol]);
+            }
+        }
+
+        return matches;
+    }
 }
