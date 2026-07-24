@@ -1,5 +1,2 @@
 /certificates/*   /details/   200
-/certs/*   /details/   301
-/details/*   /details/   302
-/blog/* /details/:splat 301
-/news/* /details/:splat 200
+/details1/*        /details/    200
