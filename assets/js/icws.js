@@ -224,10 +224,13 @@ if (!window._ICWS_LOADED_) {
         }));
 
         const layout = {
-            polar: { radialaxis: { visible: true, range: [0, 5] } }
+            polar: {
+                radialaxis: { visible: true, range: [0, 5], fixedrange: true },
+                angularaxis: { fixedrange: true }
+            }
         };
 
-        Plotly.newPlot(radarId, data, layout, { displayModeBar: false });
+        Plotly.newPlot(radarId, data, layout, { displayModeBar: false, staticPlot: true });
     };
 
     window.extractColumn = function (data, columnName, delimiter = ';') {
