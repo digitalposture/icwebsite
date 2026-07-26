@@ -1,5 +1,5 @@
 /**
- * icws.js — shared utilities for the iCertificates Jekyll site.
+ * icws.js - shared utilities for the iCertificates Jekyll site.
  *
  * Safe for multiple script tag includes on the same page.
  */
@@ -8,7 +8,7 @@ if (!window._ICWS_LOADED_) {
     window._ICWS_LOADED_ = true;
 
     // ============================================================
-    // § 1 · ErrorBox — UI notification + ISIN validation
+    //  1 . ErrorBox - UI notification + ISIN validation
     // ============================================================
     window.ErrorBox = (function () {
         const timers = {};
@@ -63,7 +63,7 @@ if (!window._ICWS_LOADED_) {
 
 
     // ============================================================
-    // § 2 · Select Helpers
+    //  2 . Select Helpers
     // ============================================================
     window.createSelectUpdater = function ({ wsUrl, wsSecret, delimiter = ';' }) {
         return function updateSelectOptions(selectId, selectPath, valPos, textPos) {
@@ -106,7 +106,7 @@ if (!window._ICWS_LOADED_) {
 
 
     // ============================================================
-    // § 3 · DataTable Helpers
+    //  3 . DataTable Helpers
     // ============================================================
     window.extractData = function (dataRaw, tablePos, tableRespCols, delimiter = ';') {
         if (!dataRaw || dataRaw.length === 0) return [];
@@ -131,7 +131,7 @@ if (!window._ICWS_LOADED_) {
 
 
     // ============================================================
-    // § 4 · Plotly Helpers
+    //  4 . Plotly Helpers
     // ============================================================
 
     const LBL_MAX_LEN = 100;
@@ -259,7 +259,7 @@ if (!window._ICWS_LOADED_) {
             hovertext: pcts.map(v => v + '%'),
             marker: {
                 line: { width: 2 },
-                colors: pcts,   // signed value → red/green scale
+                colors: pcts,   // signed value -> red/green scale
                 cauto: true,
                 colorscale: [[0, 'red'], [1, 'green']]
             }
