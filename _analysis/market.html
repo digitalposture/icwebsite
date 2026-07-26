@@ -130,16 +130,22 @@ hasPlot: true
       const gd = document.getElementById('plotlyid');
       if (!gd) return;
 
-      if (ids.length > 0) {
-        highlightSunburstIds(gd, ids, {
-          highlightColor: '#6afc09',
-          dimColor: 'rgba(200,200,200,0.35)',
-          originalColors: originalPcts
+      // if (ids.length > 0) {
+        // highlightSunburstIds(gd, ids, {
+        //   highlightColor: '#6afc09',
+        //   dimColor: 'rgba(200,200,200,0.35)',
+        //   originalColors: originalPcts
+        // });
+        highlightBordersSunburstIds(gd, ids, {
+            highlightColor: '#6afc09',
+            highlightWidth: 3,
+            defaultBorderColor: 'white',
+            defaultBorderWidth: 2
         });
-      } else if (originalPcts) {
-        // nessuna selezione/nessun risultato -> torna ai colori originali
-        resetSunburstColors(gd, originalPcts);
-      }
+      // } else if (originalPcts) {
+      //   // nessuna selezione/nessun risultato -> torna ai colori originali
+      //   resetSunburstColors(gd, originalPcts);
+      // }
     }
 
     // Ricerca testuale: filtra le option e evidenzia TUTTI i match trovati

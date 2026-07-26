@@ -293,6 +293,53 @@ if (!window._ICWS_LOADED_) {
         Plotly.restyle(gd, { 'marker.colors': [newColors] }, [0]);
     }
 
+    window.highlightBordersSunburstIds = function (gd, targetIds, {
+        highlightColor = '#6afc09',
+        highlightWidth = 3,
+        defaultBorderColor = 'rgba(0,0,0,0)',
+        defaultBorderWidth = 1,
+        originalColors = null
+    } = {}) {
+        const trace = gd.data[0];
+        const ids = trace.ids;
+
+        // Reset case: no targets selected
+        if (!targetIds || targetIds.length === 0) {
+            const resetBorderColors = ids.map(() => defaultBorderColor);
+            const resetBorderWidths = ids.map(() => defaultBorderWidth);
+
+            const update = {
+                'marker.line.color': [resetBorderColors],
+                'marker.line.width': [resetBorderWidths]
+            };
+
+            // Only touch marker.colors if we're restoring from a previous dim
+            if (originalColors) {
+                update['marker.colors'] = [originalColors];
+            }
+
+            Plotly.restyle(gd, update, [0]);
+            return;
+        }
+
+        const targetSet = new Set(targetIds);
+
+        const borderColors = ids.map(id => targetSet.has(id) ? highlightColor : defaultBorderColor);
+        const borderWidths = ids.map(id => targetSet.has(id) ? highlightWidth : defaultBorderWidth);
+
+        const update = {
+            'marker.line.color': [borderColors],
+            'marker.line.width': [borderWidths]
+        };
+
+        // Preserve/restore original fill colors instead of dimming
+        if (originalColors) {
+            update['marker.colors'] = [originalColors];
+        }
+
+        Plotly.restyle(gd, update, [0]);
+    }
+
     window.resetSunburstColors = function (gd, originalPcts) {
         if (originalPcts) Plotly.restyle(gd, { 'marker.colors': [originalPcts] }, [0]);
     }

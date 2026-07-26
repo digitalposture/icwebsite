@@ -54,6 +54,12 @@ plugins:
   - jekyll-seo-tag
   - jekyll-feed
   - jekyll-remote-theme
+  - jekyll-minifier
+
+jekyll-minifier:
+  uglifier_args:
+    harmony: true
+  # exclude: ['assets/some-already-minified.js']
 
 site-css: 
 - "/assets/css/icws.css"
