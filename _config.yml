@@ -56,9 +56,9 @@ plugins:
   - jekyll-remote-theme
   - jekyll-minifier
 
-jekyll-minifier:
-  uglifier_args:
-    harmony: true
+# jekyll-minifier:
+#   uglifier_args:
+#     harmony: true
   # exclude: ['assets/some-already-minified.js']
 
 site-css: 
