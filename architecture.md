@@ -1,6 +1,6 @@
 ---
 layout: page
-title: ACUED
+title: Architecture, about this website
 permalink: /about-this-website-architecture/
 ---
 

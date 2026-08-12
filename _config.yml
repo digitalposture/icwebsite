@@ -74,9 +74,9 @@ remote_theme: daattali/beautiful-jekyll@6.0.1
 
 navbar-links:
   About: 
-    - About Us: "about-us"
-    - About This Website: "about-this-website-architecture"
-    - ACUED Scoring Framework: "acued-scoring-framework"
+    - Us: "about-us"
+    - This Website: "about-this-website-architecture"
+    - The Scoring Framework: "acued-scoring-framework"
   Issuers:
     - BNP: "issuers/bnp"
     - Marex: "issuers/marex"

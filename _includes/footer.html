@@ -31,16 +31,16 @@
         {% endif %}
       {% endif%}
 
-      {% if site.edit_page_button and site.github.repository_url %}
-        &nbsp;&bull;&nbsp;
-        <a title="Edit this page on GitHub" href="{{ site.github.repository_url }}/edit/{{ site.github.source.branch }}/{{ page.path }}" class="text_muted">Edit page</a>
-       {% endif%}
-
       </p>
       {% unless site.remove-ads %}<p class="theme-by text-muted">
         Powered by
         <a href="mailto:info@digitalposture.it"><strong>Digital Posture</strong></a>
       </p>{% endunless %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+        <p class="theme-by text-muted"><img width="32px" src="/assets/icons/ai-agent.png"/><i>This page is generated via AI agent</i></p>
       </div>
     </div>
   </div>
