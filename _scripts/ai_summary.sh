@@ -12,17 +12,18 @@ payload=$(jq -n \
       { role: "system", content: $system },
       { role: "user", content: $user }
     ],
-    model: "groq/compound-mini",
-    temperature: 1,
-    max_completion_tokens: 2048,
-    top_p: 1,
-    stream: false,
-    stop: null,
-    compound_custom: {
-      tools: {
-        enabled_tools: ["web_search", "visit_website"]
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1,
+    "max_completion_tokens": 2048,
+    "top_p": 1,
+    "stream": true,
+    "reasoning_effort": "medium",
+    "stop": null,
+    "tools": [
+      {
+        "type": "browser_search"
       }
-    }
+    ]
   }')
 
 response=$(curl -s "https://api.groq.com/openai/v1/chat/completions" \
