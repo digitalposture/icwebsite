@@ -28,4 +28,6 @@ mv temp.md "../_posts/$FILENAME"
 
 echo "Saved article to: ../_posts/${FILENAME}"
 cat "../_posts/$FILENAME"
-git status
+git add "../_posts/$FILENAME"
+git commit -m "${TITLE}" 
+git push origin main

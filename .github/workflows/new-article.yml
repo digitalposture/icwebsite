@@ -35,7 +35,7 @@ jobs:
       - name: Build article 
         working-directory: ./_scripts
         run: |
-          bash ./build_article.sh ${{ env.TITLE }} ${{ env.ARTICLE_URL }}
+          bash ./build_article.sh "${{ env.TITLE }}" "${{ env.ARTICLE_URL }}"
       # - name: Commit new article
       #   uses: stefanzweifel/git-auto-commit-action@v5
       #   with:
