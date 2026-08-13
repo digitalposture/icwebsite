@@ -1,0 +1,8 @@
+
+Investment certificates are bank‑issued structured debt products that combine a bond with one or more options, promising capital protection and extra returns, but they conceal sizeable embedded margins, barrier‑linked loss risk and ill‑iquid secondary markets【1†L30-L36】【1†L58-L66】.  
+
+## What investors often don’t see  
+Banks embed a 2‑5 % annual margin in the price of the certificate, hidden from the prospectus, which reduces the upside compared with buying the underlying bond and options directly【1†L75-L84】【1†L94-L100】.  The most common “conditional capital‑protection” certificates appear safe until a pre‑set barrier (often 60‑70 % of the initial value) is breached; a market crash can instantly turn the product into a loss‑bearing exposure, wiping out up to 45 % of capital in the illustrated scenario【1†L106-L124】.  
+
+## Liquidity, tax and when they might make sense  
+Unlike ETFs, certificates trade on a thin secondary market where the issuer is the sole market maker, leading to wide bid‑ask spreads (1‑3 %) and repurchase prices that typically fall short of fair value, especially under stress【1†L160-L177】.  A modest tax advantage—allowing gains to offset capital losses—often does not compensate for the 3‑5 % hidden cost, making the product unattractive for most investors【1†L137-L154】.  Compared with a DIY bond‑plus‑ETF blend, certificates are inferior on cost, transparency, liquidity and issuer credit risk, and only worthwhile for investors seeking a quick tax‑loss offset, a single‑instrument exposure, or absolute capital protection from a strong, solvent bank【1†L192-L199】【1†L205-L224】.

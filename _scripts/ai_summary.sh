@@ -16,7 +16,7 @@ payload=$(jq -n \
     "temperature": 1,
     "max_completion_tokens": 2048,
     "top_p": 1,
-    "stream": true,
+    "stream": false,
     "reasoning_effort": "medium",
     "stop": null,
     "tools": [
@@ -40,15 +40,4 @@ if [ -z "$content" ] || [ "$content" == "null" ]; then
   exit 1
 fi
 
-# Slugify TITLE: lowercase, spaces/underscores -> hyphens, strip anything
-# that's not alphanumeric or hyphen, collapse repeats, trim edges.
-SLUG=$(echo "${TITLE}" \
-  | tr '[:upper:]' '[:lower:]' \
-  | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g')
-
-DATE=$(date +%Y-%m-%d)
-FILENAME="${DATE}-${SLUG}.md"
-
-echo "$content" > "$FILENAME"
 echo "$content" > "result.md"
-echo "Saved response to filename: ${FILENAME}"

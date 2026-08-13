@@ -30,12 +30,12 @@ jobs:
           cat system.txt
           cat user.txt
           bash ./ai_summary.sh   
+          cat result.md
 
-      - name: Ls script
+      - name: Build article 
         working-directory: ./_scripts
         run: |
-          ls -la .
-          cat result.md
+          bash ./build_article.sh ${{ env.TITLE }} ${{ env.ARTICLE_URL }}
       # - name: Commit new article
       #   uses: stefanzweifel/git-auto-commit-action@v5
       #   with:
