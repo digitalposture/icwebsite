@@ -1,0 +1,37 @@
+name: New Article from Email
+on:
+  repository_dispatch:
+    types: [new-article]
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      TITLE: ${{ github.event.client_payload.title }}
+      ARTICLE_URL: ${{ github.event.client_payload.url }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Prepare prompts
+        run: |
+          cat > system.txt <<'EOF'
+          act like a financial journalist, report the data accurately; do not add information you do not know. Your response must be in Markdown format (use ## for paragraph titles, skip the article title and start by typing the exec summary). The response has to contain a short executive summary (no title) and maximum 3 paragraphs.
+          EOF
+
+          cat > user.txt <<EOF
+          read the following article and provide a summary suitable for a post: ${ARTICLE_URL}
+          use the title: "${TITLE}"
+          EOF
+
+      - name: Run Groq script
+        run: bash ./_scripts/ai_summary.sh   # the script from before
+
+      - name: Run Groq script
+        run: bash ls -la ./_scripts
+      # - name: Commit new article
+      #   uses: stefanzweifel/git-auto-commit-action@v5
+      #   with:
+      #     commit_message: "Add article: ${{ env.TITLE }}"

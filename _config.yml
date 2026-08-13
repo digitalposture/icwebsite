@@ -169,6 +169,7 @@ exclude:
   - "**/NOT-USED*"
   - NOT-USED*
   - docs/
+  - scripts/
 
 ## #################
 ## Content settings

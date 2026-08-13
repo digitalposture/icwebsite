@@ -1,0 +1,2 @@
+read the following article and provide a summary suitable for a post: ${{ env.ART_URL}}
+use the title: "${{ env.ART_TITLE}}"
