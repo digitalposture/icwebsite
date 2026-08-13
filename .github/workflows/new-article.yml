@@ -6,8 +6,7 @@ on:
 jobs:
   generate:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/0xmassi/webclaw:latest
+
     permissions:
       contents: write
     env:
@@ -16,10 +15,6 @@ jobs:
       ARTICLE_URL: ${{ github.event.client_payload.url }}
     steps:
       - uses: actions/checkout@v6
-
-      - name: Verify tools
-        run: |
-          webclaw --version
 
       - name: Render user.txt from template
         working-directory: ./_scripts
