@@ -49,4 +49,5 @@ DATE=$(date +%Y-%m-%d)
 FILENAME="${DATE}-${SLUG}.md"
 
 echo "$content" > "$FILENAME"
+echo "$content" > "result.md"
 echo "Saved response to filename: ${FILENAME}"

@@ -15,22 +15,26 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Prepare prompts
+      - name: Render user.txt from template
+        working-directory: ./_scripts
+        env:
+          TITLE: ${{ github.event.client_payload.title }}
+          ARTICLE_URL: ${{ github.event.client_payload.url }}
         run: |
-          cat > system.txt <<'EOF'
-          act like a financial journalist, report the data accurately; do not add information you do not know. Your response must be in Markdown format (use ## for paragraph titles, skip the article title and start by typing the exec summary). The response has to contain a short executive summary (no title) and maximum 3 paragraphs.
-          EOF
-
-          cat > user.txt <<EOF
-          read the following article and provide a summary suitable for a post: ${ARTICLE_URL}
-          use the title: "${TITLE}"
-          EOF
+          envsubst '${TITLE} ${ARTICLE_URL}' < user_template.txt > user.txt
 
       - name: Run Groq script
-        run: bash ./_scripts/ai_summary.sh   # the script from before
+        working-directory: ./_scripts
+        run: |
+          cat system.txt
+          cat user.txt
+          bash ./ai_summary.sh   
 
-      - name: Run Groq script
-        run: bash ls -la ./_scripts
+      - name: Ls script
+        working-directory: ./_scripts
+        run: |
+          ls -la .
+          cat result.md
       # - name: Commit new article
       #   uses: stefanzweifel/git-auto-commit-action@v5
       #   with:
