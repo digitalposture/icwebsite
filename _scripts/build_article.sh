@@ -28,6 +28,8 @@ mv temp.md "../_posts/$FILENAME"
 
 echo "Saved article to: ../_posts/${FILENAME}"
 cat "../_posts/$FILENAME"
+git config user.name "github-actions[bot]"
+git config user.email "github-actions[bot]@users.noreply.github.com"
 git add "../_posts/$FILENAME"
 git commit -m "${TITLE}" 
 git push origin main

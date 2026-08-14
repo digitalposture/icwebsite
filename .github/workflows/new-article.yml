@@ -33,6 +33,8 @@ jobs:
           cat result.md
 
       - name: Build article 
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ./_scripts
         run: |
           bash ./build_article.sh "${{ env.TITLE }}" "${{ env.ARTICLE_URL }}"
