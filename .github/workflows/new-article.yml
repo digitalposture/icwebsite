@@ -18,17 +18,11 @@ jobs:
 
       - name: Input sanity check
         working-directory: ./_scripts
-        env:
-          TITLE: ${{ github.event.client_payload.title }}
-          ARTICLE_URL: ${{ github.event.client_payload.url }}
         run: |
           bash sanity_check.sh
 
       - name: Render user.txt from template
         working-directory: ./_scripts
-        env:
-          TITLE: ${{ github.event.client_payload.title }}
-          ARTICLE_URL: ${{ github.event.client_payload.url }}
         run: |
           envsubst '${TITLE} ${ARTICLE_URL}' < user_template.txt > user.txt
 
