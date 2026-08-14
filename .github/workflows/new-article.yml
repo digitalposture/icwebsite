@@ -9,6 +9,7 @@ jobs:
 
     permissions:
       contents: write
+      pull-requests: write
     env:
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
       TITLE: ${{ github.event.client_payload.title }}
