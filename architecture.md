@@ -26,7 +26,7 @@ automated and repeatable per ISIN.
 ## 2. High Level Diagram
 ![Architecture diagram](/assets/imgs/icertificates_full_agent_pipeline.svg)
 
-| Name/Acronym | Description | Technologies |
+| **Name/Acronym** | **Description** | **Technologies** |
 |---|---|---|
 | LLM | Trained API first AI | Groq + Gemini |
 | GCP | Google Cloud Platfrom | BigQuery + Storage + Workers |
@@ -38,7 +38,7 @@ automated and repeatable per ISIN.
 ---
 ## 3. What each type of automation is responsible for
 
-| Layer | Technology | Responsibility |
+| **Layer** | **Technology** | **Responsibility** |
 |---|---|---|
 | Email triage & ISIN registry | Zapier + Gmail + Google Docs | Turns an incoming email into a de-duplicated, tracked ISIN with a KID URL. |
 | Enrichment agent | Zapier + Gemini | Reads KID/website content and produces structured JSON (details, tickers, ex-dates) for a single ISIN, on request. |
