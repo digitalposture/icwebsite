@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 if [ -z "${TITLE// }" ]; then
     echo "::error::TITLE is empty"
     exit 1
