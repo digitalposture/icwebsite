@@ -1,8 +1,8 @@
 ---
 language: en
 layout: post
-title:  "Meglio comprarli all'emissione o sul mercato secondario?"
-subtitle: "Meglio comprarli all'emissione o sul mercato secondario?"
+title:  "Pitched by banks vs on the stock exchange?"
+subtitle: "Secondary‑market buying can change the equation"
 cover-img: /assets/img/path.jpg
 thumbnail-img: /assets/img/thumb.png
 share-img: /assets/imgs/path.jpg

@@ -1,8 +1,8 @@
 ---
 language: en
 layout: post
-title:  "Certificati 101: cosa sono gli Express"
-subtitle: "Certificati 101: cosa sono gli Express  "
+title:  "Certificates 101: what are the Express certificates?"
+subtitle: "Express certificates are conditional‑capital products that can terminate early"
 cover-img: /assets/img/path.jpg
 thumbnail-img: /assets/img/thumb.png
 share-img: /assets/imgs/path.jpg

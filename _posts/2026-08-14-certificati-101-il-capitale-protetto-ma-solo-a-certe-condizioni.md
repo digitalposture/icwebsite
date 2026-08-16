@@ -1,8 +1,8 @@
 ---
 language: en
 layout: post
-title:  "Certificati 101: il capitale è protetto ma solo a certe condizioni"
-subtitle: "Certificati 101: il capitale è protetto ma solo a certe condizioni  "
+title:  "Certificates 101: What are conditionally protected certificates?"
+subtitle: "The invested amount is safe but under specific circumstances"
 cover-img: /assets/img/path.jpg
 thumbnail-img: /assets/img/thumb.png
 share-img: /assets/imgs/path.jpg

@@ -1,8 +1,8 @@
 ---
 language: en
 layout: post
-title:  "Certificati 101: cosa sono i Phoenix certificate"
-subtitle: "Phoenix Certificates Explained  "
+title:  "Certificates 101: what Phoenix certificates are?"
+subtitle: "Phoenix Certificates Explained"
 cover-img: /assets/img/path.jpg
 thumbnail-img: /assets/img/thumb.png
 share-img: /assets/imgs/path.jpg
