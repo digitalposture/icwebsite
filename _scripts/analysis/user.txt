@@ -1,0 +1,3 @@
+by using the following list of ISIN: DE000VK6PMC6 (5000 EUR owned), NLBNPIT303N6 (4000 EUR owned), IT0006775891 (2000 EUR owned), IT0006776220 (4000 EUR) and IT0006776014 (6000 EUR) provide:
+1. a complete list of ISIN and related certificate name (including underlyings)
+2. an analysis about risks, correlations with indexes (for ex. SP8P or SP6P, KOSPI 200, Nikkei 225, SMI, ...) and sectors
